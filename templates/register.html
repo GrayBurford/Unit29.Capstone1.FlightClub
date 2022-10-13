@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+
+<h1 class="display-4 text-primary text-center mt-5">*** Register Your Account ***</h1>
+
+<div class="container mt-5">
+    <form action="/register" method="POST">
+
+        {{ form.hidden_tag() }}
+
+        {% for field in form.errors %}
+        <div class="alert alert-danger">{{field}}:
+            <ul>
+                {% for error in form.errors[field] %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+
+        {% for field in form if field.widget.input_type != 'hidden'%}
+        <div class="form-group row">
+            {{ field.label(class_="col-sm-2 col-form-label")}}
+            <div class="col-sm-10">
+                {{ field(class_="form-control") }}
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="col-12 mt-5">
+            <button class="btn btn-primary" type="submit">Register Account</button>
+        </div>
+                
+        <!-- <div class="form-group row">
+          <div class="col-sm-10 offset-sm-2">
+            <button type="submit" class="btn btn-info">Register Account</button>
+          </div>
+        </div> -->
+
+    </form>
+</div>
+
+  
+{% endblock %}

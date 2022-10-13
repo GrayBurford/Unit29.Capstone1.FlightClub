@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block title %}Flight Search{% endblock %}
+
+{% block links %}
+<link
+rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+/>
+<link rel="stylesheet" href="../style.css" />
+{% endblock %}
+
+{% block content %}
+<div class="container-sm">
+	<!-- Begin card to contain origin/destination -->
+	<div class="my-2 card">
+		<div class="card-body">
+			<h5 class="card-title">Locations</h5>
+			<div class="row">
+				<!-- Begin origin input -->
+				<div class="col-sm">
+					<div class="mb-2">
+						<label id="origin-label" for="origin-input" class="form-label">Origin</label>
+						<div class="input-group">
+							<span class="input-group-text"><i class="bi-pin-map"></i></span>
+							<input type="text" class="form-control" list="origin-options" id="origin-input" placeholder="Airport IATA Code" aria-descrribedby="origin-label">
+							<datalist id="origin-options"></datalist>
+						</div>
+					</div>
+				</div>
+				<!-- End origin input -->
+				<!-- Begin destination input -->
+				<div class="col-sm">
+					<div class="mb-2">
+						<label id="destination-label" for="destination-input" class="form-label">Destination</label>
+						<div class="input-group">
+							<span class="input-group-text"><i class="bi-pin-map-fill"></i></span>
+							<input type="text" class="form-control" list="destination-options" id="destination-input" placeholder="Airport IATA Code" aria-descrribedby="destination-label">
+							<datalist id="destination-options"></datalist>
+						</div>
+					</div>
+				</div>
+				<!-- End destination input -->
+			</div>
+		</div>
+	</div>
+	<!-- End card to contain origin/destination -->
+
+	<div class="row">
+		<!-- Begin dates column -->
+		<div class="mb-2 col">
+			<div class="h-100 card">
+				<div class="card-body">
+					<h5 class="card-title">Dates</h5>
+					<!-- Begin flight select -->
+					<div class="mb-2">
+						<label id="flight-type-label" for="flight-type-select" class="form-label">Flight</label>
+						<select name="" id="flight-type-select" class="form-select" aria-describedby="flight-type-label">
+							<option value="one-way">One-way</option>
+							<option value="round-trip">Round Trip</option>
+						</select>
+					</div>
+					<!-- End flight select -->
+					<!-- Begin departure date input -->
+					<div id="departure-date" class="mb-2">
+						<label id="departure-date-label" for="departure-date-input" class="form-label">Departure date</label>
+						<div class="input-group">
+							<span class="input-group-text"><i class="bi-calendar"></i></span>
+							<input type="date" class="form-control" id="departure-date-input" aria-describedby="departure-date-label">
+						</div>
+					</div>
+					<!-- End departure date input -->
+					<!-- Begin return date input -->
+					<div id="return-date" class="mb-2">
+						<label id="return-date-label" for="return-date-input" class="form-label">Return date</label>
+						<div class="input-group">
+							<span class="input-group-text"><i class="bi-calendar-fill"></i></span>
+							<input type="date" class="form-control" id="return-date-input" aria-describedby="return-date-label">
+						</div>
+					</div>
+					<!-- End return date input -->
+				</div>
+			</div>
+		</div>
+		<!-- End dates column -->
+		<!-- Begin details column -->
+		<div class="mb-2 col">
+			<div class="h-100 card">
+				<div class="card-body">
+					<h5 class="card-title">Details</h5>
+					<!-- Begin travel class input -->
+					<div class="mb-2">
+						<label id="travel-class-label" for="travel-class-select" class="form-label">Travel Class</label>
+						<select name="" id="travel-class-select" class="form-select" aria-describedby="travel-class-label">
+							<option value="ECONOMY">Economy</option>
+							<option value="PREMIUM_ECONOMY">Premium Economy</option>
+							<option value="BUSINESS">Business</option>
+							<option value="FIRST">First</option>
+						</select>
+					</div>
+					<!-- End travel class input -->
+					<label class="form-label">Passengers</label>
+					<!-- Begin adult input -->
+					<div class="mb-2">
+						<div class="input-group">
+							<label for="adults-input" class="input-group-text">Adults</label>
+							<input type="number" min="0" max="7" class="form-control" id="adults-input" aria-describedby="adults-label">
+						</div>
+						<span id="adults-label" class="form-text">12 years old and older</span>
+					</div>
+					<!-- End adult input -->
+					<!-- Begin children input -->
+					<div class="mb-2">
+						<div class="input-group">
+							<label for="children-input" class="input-group-text">Children</label>
+							<input type="number" min="0" max="7" class="form-control" id="children-input" aria-describedby="children-label">
+						</div>
+						<span id="children-label" class="form-text">2 to 12 years old</span>
+					</div>
+					<!-- End children input -->
+					<!-- Begin infant input -->
+					<div class="mb-2">
+						<div class="input-group">
+							<label for="infants-input" class="input-group-text">Infants</label>
+							<input type="number" min="0" max="7" class="form-control" id="infants-input" aria-describedby="infants-label">
+						</div>
+						<span id="infants-label" class="form-text">Up to 2 years old</span>
+					</div>
+					<!-- End infant input -->
+				</div>
+			</div>
+		</div>
+		<!-- End passenger details column -->
+	</div>
+	
+	<button id="search-button" class="w-100 btn btn-primary" disabled>Search</button>
+	
+</div>
+
+<script src="../static/script.js"></script>
+
+{% endblock %}
