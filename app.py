@@ -4,6 +4,7 @@ from models import db, connect_db, User
 from forms import RegisterUserForm, LoginForm, EditUserProfileForm, SearchFlightForm
 from flask_debugtoolbar import DebugToolbarExtension
 import os, json, requests
+from secrets import X_RAPIDAPI_KEY
 
 CURR_USER_ID = "" # value is the ID from an instance of User class.
 
@@ -36,7 +37,7 @@ def get_flight_data(ori, des, date):
     }
 
     headers = {
-        "X-RapidAPI-Key": "fa1746626bmsh7be87ec830a5eccp143408jsnb247fa783472",
+        "X-RapidAPI-Key": X_RAPIDAPI_KEY,
         "X-RapidAPI-Host": "priceline-com-provider.p.rapidapi.com"
     }
 
