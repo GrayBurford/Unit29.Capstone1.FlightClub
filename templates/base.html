@@ -39,6 +39,7 @@
                         <a class="nav-link p-2 mb-2 bg-light text-dark" href="/search">Search</a>
                     </li>
                 </ul>
+                <span class="bg-primary text-white">{% if g.user %} You're logged in as: <strong>{{ g.user.username }}</strong>{% endif %}</span>
             </div>
         </div>
     </nav>
