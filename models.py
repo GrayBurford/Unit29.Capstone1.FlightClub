@@ -6,12 +6,16 @@ db = SQLAlchemy()
 
 bcrypt = Bcrypt()
 
+# default=datetime.utcnow
+# acct_created = db.Column(db.DateTime(timezone=True), nullable=False, server_default=db.func.now())
+
 def connect_db(app):
     """Connect app to database"""
     db.app = app
     db.init_app(app)
 
-default_user_pic = '/static/default_user_icon.jpeg'
+default_user_pic = '../static/default_user_icon.jpg'
+default_user_url = 'https://w0.peakpx.com/wallpaper/982/773/HD-wallpaper-anonymous-fawkes-hack-mask.jpg'
 
 
 class User(db.Model):
@@ -21,21 +25,21 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
-    password = db.Column(db.String(30), nullable=False)
-    first_name = db.Column(db.String(30), nullable=False)
+    password = db.Column(db.String(80), nullable=False)
+    first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     age = db.Column(db.Integer, nullable=True)
     email = db.Column(db.String(80), unique=True, nullable=False)
-    profile_pic = db.Column(db.String(120), nullable=True)
-    notes = db.Column(db.Text, nullable=True)
-    acct_created = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    profile_pic = db.Column(db.String(1000), nullable=True, default=default_user_pic)
+    notes = db.Column(db.String(1000), nullable=True)
+
 
     def __repr__(self):
         """Return representation of instance of User class."""
 
-        return f"<User #{self.id}: {self.username}, {self.email}, {self.first_name}, {self.last_name}, {self.age}, {self.notes}, {self.acct_created}>"
+        return f"<User #{self.id}: {self.username}, {self.email}, {self.first_name}, {self.last_name}, {self.age}, {self.profile_pic}, {self.notes}>"
 
-    def pic_url(self):
+    def pic_src(self):
         """Return image for user -- user entered or default"""
 
         return self.profile_pic or default_user_pic
@@ -46,7 +50,7 @@ class User(db.Model):
         
         hashed_pwd = bcrypt.generate_password_hash(password)
         # now turn bytestring into normal (unicode utf8) string
-        hashed_pwd_utf8 = hashed_pwd.decode('utf8')
+        hashed_pwd_utf8 = hashed_pwd.decode('utf8', 'ignore')
 
         user = cls(
             username=username,
@@ -57,8 +61,8 @@ class User(db.Model):
             email=email,
             profile_pic=profile_pic,
             notes=notes
-            )
-        db.session.add(user)
+        )
+        
         return user
 
     @classmethod
@@ -73,10 +77,10 @@ class User(db.Model):
             return False
 
 
-class Trip(db.Model):
+class Flight(db.Model):
     """Create model instance of Trip class."""
 
-    __tablename__ = "trips"
+    __tablename__ = "flights"
 
     id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
     airline_name = db.Column(db.String, nullable=False)

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ user.username }} {% endblock %}
+
+{% block content %}
+
+<h1 class="display-6">Hi, {{ user.username }}! </h1>
+
+<ul>
+    <li> {{ user.username }} </li>
+    <li> {{ user.password }} </li>
+    <li> {{ user.first_name }} </li>
+    <li> {{ user.last_name }} </li>
+    <li> {{ user.age }} </li>
+    <li> {{ user.email }} </li>
+    <li> {{ user.profile_pic }} </li>
+    <li> {{ user.notes }} </li>
+</ul>
+
+<div class="container mt-5">
+    <img src='{{ user.profile_pic }}' width="150" height="150" alt="Image for {{ user.username }}">
+</div>
+  
+{% endblock %}

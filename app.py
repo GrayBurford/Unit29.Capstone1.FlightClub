@@ -1,9 +1,11 @@
-from flask import Flask, redirect, render_template, flash, session
+from sqlalchemy.exc import IntegrityError
+from flask import Flask, redirect, render_template, flash, session, request, g, url_for
 from models import db, connect_db, User
-from forms import RegisterUserForm, LoginForm, EditUserProfileForm
+from forms import RegisterUserForm, LoginForm, EditUserProfileForm, SearchFlightForm
 from flask_debugtoolbar import DebugToolbarExtension
 import os, json, requests
-from amadeus import Client, ResponseError
+
+CURR_USER_ID = "" # value is the ID from an instance of User class.
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] =  os.environ.get('DATABASE_URL', "postgresql:///flight_club")
@@ -19,87 +21,217 @@ connect_db(app)
 
 db.create_all()
 
-# Cheat Sheet:
-# https://possible-quilt-2ff.notion.site/Cheat-sheet-e059caf4fcd342b78705f9f3d6f88f1d
-API_BASE_URL = "https://test.api.amadeus.com"
-API_KEY = "gW89o76UnCoZqBPWxvo6yLPhNqfQaGtf"
-API_SECRET = "RUaGyaznry7uGL5E"
-API_ACCESS_TOKEN = ""
+def get_flight_data(ori, des, date):
+    """Fetches flight data for a given route on a given date."""
 
-# Obtain 30 minute access token
-    # response = requests.post(f'{API_BASE_URL}/v1/security/oauth2/token',
-    #                     headers = {"Content-Type" : "application/x-www-form-urlencoded"},
-    #                     data = f"grant_type=client_credentials&client_id={API_KEY}&client_secret={API_SECRET}"
-    #                     )
+    url = "https://priceline-com-provider.p.rapidapi.com/v2/flight/departures"
 
-    # API_ACCESS_TOKEN = response.json()["access_token"]
-    # print(response.json()["access_token"])
-    # TOKEN_EXPIRATION = response.json()["expires_in"]
+    querystring = {
+        "sid":"iSiX639",
+        "departure_date":date,
+        "adults":"1",
+        "origin_airport_code":ori,
+        "destination_airport_code":des,
+        "number_of_itineraries":"10"
+    }
 
-amadeus = Client(
-    client_id = API_KEY,
-    client_secret = API_SECRET
-)
+    headers = {
+        "X-RapidAPI-Key": "fa1746626bmsh7be87ec830a5eccp143408jsnb247fa783472",
+        "X-RapidAPI-Host": "priceline-com-provider.p.rapidapi.com"
+    }
+
+    response = requests.request("GET", url, headers=headers, params=querystring)
+
+    itineraries = response.json()['getAirFlightDepartures']['results']['result']['itinerary_data']
+
+    itineraries_list = []
+
+    for itin in itineraries:
+        if itineraries[itin]['slice_data']['slice_0']['info']['connection_count'] == 0:
+            itineraries_list.append(itineraries[itin]['slice_data']['slice_0']['flight_data']['flight_0'])
+
+    return itineraries_list
+
+
+@app.before_request
+def add_user_to_g():
+    """If user is logged in, add current user *instance* to Flask Global"""
+
+    if CURR_USER_ID in session:
+        g.user = User.query.get(session[CURR_USER_ID])
+    else:
+        g.user = None
+
+
+def do_login(user):
+    """Log in 'user' which is an instance of the User class."""
+
+    session[CURR_USER_ID] = user.id
+
+
+def do_logout():
+    """Logout 'user' -- an instance of the User class."""
+
+    if CURR_USER_ID in session:
+        del session[CURR_USER_ID]
+
 
 @app.route('/', methods=["GET"])
 def home_page():
     """Display anon landing page."""
 
-    try:
-        response = amadeus.shopping.flight_offers_search.get(
-            originLocationCode='EWR',
-            destinationLocationCode='ATL',
-            departureDate='2022-10-14',
-            adults=1,
-            max=5,
-            travelClass='ECONOMY',
-            currencyCode='USD'
-            # includedAirlineCodes='UA'
-            # nonStop=True DOES NOT WORK!!!
-            # SPIRIT FLIGHT TIMES ARE WRONG
-        )
-        print(response.data)
-    except ResponseError as error:
-        print(error)
+    return render_template('anon_home.html')
 
-    flash("Welcome to the home page", "primary")
-    return render_template('base.html', response=response)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_user():
     """Render register user form."""
 
-    # if "username" in session (or g??)
-    #     return redirect('/')
-
     form = RegisterUserForm()
 
     if form.validate_on_submit():
-        username = form.username.data
-        password = form.password.data
-        first_name = form.first_name.data
-        last_name = form.last_name.data
-        age = form.age.data
-        email = form.email.data
-        profile_pic = form.profile_pic.data
-        notes = form.notes.data
+        try:
+            username = form.username.data
+            password = form.password.data
+            first_name = form.first_name.data
+            last_name = form.last_name.data
+            age = form.age.data
+            email = form.email.data
+            profile_pic = form.profile_pic.data or User.profile_pic.default.arg
+            notes = form.notes.data
 
-        # send data from WTForms to register which is a class function. Would normally make new User instance, but first need to hash pwd with register function, which returns new User instance.
-        new_user = User.register(username, password, first_name, last_name, age, email, profile_pic, notes)
-        db.session.commit()
+            # send data from WTForms to register which is a class function. Would normally make new User instance, but first need to hash pwd with register function, which returns new User instance.
+            new_user = User.register(username, password, first_name, last_name, age, email, profile_pic, notes)
+            
+            db.session.add(new_user)
+            db.session.commit()
 
-        session['username'] = new_user.username
+        except IntegrityError:
+            flash('Username or E-Mail address is already taken! Please choose again.', 'danger')
+            return render_template('register.html', form=form)
+
+        # Adds new user's ID to session dictionary for CURR_USER_ID
+        # before_request queryies User to save g.user as that user's instance
+        do_login(new_user)
+
         flash(f"Welcome to FlightClub, {new_user.username}! Your account was created successfully!", "success")
-        return redirect('/search')
+
+        return redirect(url_for('display_user_page', username=new_user.username))
     
     else:
         return render_template('register.html', form=form)
 
-@app.route('/search', methods=['GET'])
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    """Render login form, or log a user in."""
+
+    if g.user:
+        flash(f'You are already logged in as {g.user.username}! Log in as a different user?', "danger")
+
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        user = User.authorize(form.username.data, form.password.data)
+
+        if user:
+            do_login(user)
+            flash(f"Welcome back to FlightClub, {user.username}!", "success")
+            return redirect(url_for('display_user_page', username=user.username))
+        else:
+            flash("Your username or password is incorrect! Please try again.", "danger")
+            return redirect(url_for('login'))
+
+    else:
+        return render_template('login.html', form=form)
+
+
+@app.route('/logout', methods=['GET'])
+def logout():
+    """Handle logout of a user."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    if CURR_USER_ID in session:
+        user = User.query.get_or_404(session[CURR_USER_ID])
+        flash(f"Good-bye {user.username}, you logged out successfully.", "success")
+        do_logout()
+        return redirect(url_for('home_page'))
+    else:
+        flash("You can't logout, because you're not logged in!", "warning")
+        return redirect(url_for('login'))
+
+
+@app.route('/users/<username>', methods=['GET'])
+def display_user_page(username):
+    """Renders a user's personal profile page."""
+
+    if not g.user:
+        flash("Access unauthorized. (from display_user_page)", "danger")
+        return redirect(url_for('home_page'))
+
+    user = User.query.filter_by(username=username).first()
+
+    return render_template('user_profile.html', user=user)
+
+
+@app.route('/search', methods=['GET', 'POST'])
 def flight_search():
     """Display flight search form"""
 
-    return render_template('search.html')
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    # itins = get_flight_data("EWR", "ATL", "2022-11-21")
+
+    # if request.method == 'POST':
+    #     something = request.form['something']
+
+    form = SearchFlightForm()
+
+    if form.validate_on_submit():
+        origin = form.data['origin']
+        destination = form.data['destination']
+        date = form.data['date']
+        print(f"origin = {origin}, destination = {destination}, date = {date}")
+
+        itins = get_flight_data(origin, destination, date)
+
+        flash(f"Seach successful and results compiled for viewing below.", "success")
+        return render_template('search.html', form=form, itins=itins)
+
+    else:
+        return render_template('search.html', form=form)
+
+
+
+# *********************************************************************
+# RETURN DISPLAYNAME, AIRPORT IATA, STATE, ETC
+# url = "https://priceline-com-provider.p.rapidapi.com/v1/flights/locations"
+# querystring = {"name":"EWR"}
+# headers = {
+# 	"X-RapidAPI-Key": "fa1746626bmsh7be87ec830a5eccp143408jsnb247fa783472",
+# 	"X-RapidAPI-Host": "priceline-com-provider.p.rapidapi.com"}
+# response = requests.request("GET", url, headers=headers, params=querystring)
+# print(response.text)
+# *********************************************************************
+
+
+# *********************************************************************
+# DOWNLOAD LIST OF AIRPORTS WITH IATA CODES FOR FLIGHT SEARCH
+# url = "https://priceline-com-provider.p.rapidapi.com/v2/flight/downloadAirports"
+# querystring = {"limit":"9999"}
+# headers = {
+# 	"X-RapidAPI-Key": "fa1746626bmsh7be87ec830a5eccp143408jsnb247fa783472",
+# 	"X-RapidAPI-Host": "priceline-com-provider.p.rapidapi.com"}
+# response = requests.request("GET", url, headers=headers, params=querystring)
+# print(response.json()['getSharedBOF2.Downloads.Air.Airports']['results'])
+# *********************************************************************
+
+
 
 
 # Python requests example:
@@ -131,233 +263,3 @@ def flight_search():
 #     lng = r['results'][0]['locations'][0]['latLng']['lng']
 
 #     return {"lat": lat, "lng": lng}
-
-
-# @app.route('/')
-# def home_route():
-#     """Show form asking for location to geocode."""
-
-#     return render_template('home.html')
-
-
-# @app.route('/coords', methods=["POST"])
-# def get_coords():
-#     """Handle form submission; return form, showing lat/lng from submission."""
-#     city = request.form['city']
-#     coords = request_coords(city)
-
-#     return render_template('home.html', coords=coords)
-
-
-# *******************************************
-# EXAMPLE JSON RESPONSE FROM FLIGHT OFFERS SEARCH:
-
-# {
-#   "meta": {
-#     "count": 2,
-#     "links": {
-#       "self": "https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=EWR&destinationLocationCode=SEA&departureDate=2022-10-14&adults=1&travelClass=ECONOMY&nonStop=true&max=2"
-#     }
-#   },
-#   "data": [
-#     {
-#       "type": "flight-offer",
-#       "id": "1",
-#       "source": "GDS",
-#       "instantTicketingRequired": false,
-#       "nonHomogeneous": false,
-#       "oneWay": false,
-#       "lastTicketingDate": "2022-10-04",
-#       "numberOfBookableSeats": 7,
-#       "itineraries": [
-#         {
-#           "duration": "PT6H19M",
-#           "segments": [
-#             {
-#               "departure": {
-#                 "iataCode": "EWR",
-#                 "terminal": "B",
-#                 "at": "2022-10-14T17:45:00"
-#               },
-#               "arrival": {
-#                 "iataCode": "SEA",
-#                 "at": "2022-10-14T21:04:00"
-#               },
-#               "carrierCode": "AS",
-#               "number": "15",
-#               "aircraft": {
-#                 "code": "7M9"
-#               },
-#               "operating": {
-#                 "carrierCode": "AS"
-#               },
-#               "duration": "PT6H19M",
-#               "id": "1",
-#               "numberOfStops": 0,
-#               "blacklistedInEU": false
-#             }
-#           ]
-#         }
-#       ],
-#       "price": {
-#         "currency": "EUR",
-#         "total": "238.46",
-#         "base": "208.00",
-#         "fees": [
-#           {
-#             "amount": "0.00",
-#             "type": "SUPPLIER"
-#           },
-#           {
-#             "amount": "0.00",
-#             "type": "TICKETING"
-#           }
-#         ],
-#         "grandTotal": "238.46"
-#       },
-#       "pricingOptions": {
-#         "fareType": [
-#           "PUBLISHED"
-#         ],
-#         "includedCheckedBagsOnly": false
-#       },
-#       "validatingAirlineCodes": [
-#         "AS"
-#       ],
-#       "travelerPricings": [
-#         {
-#           "travelerId": "1",
-#           "fareOption": "STANDARD",
-#           "travelerType": "ADULT",
-#           "price": {
-#             "currency": "EUR",
-#             "total": "238.46",
-#             "base": "208.00"
-#           },
-#           "fareDetailsBySegment": [
-#             {
-#               "segmentId": "1",
-#               "cabin": "ECONOMY",
-#               "fareBasis": "NH7OAVBN",
-#               "brandedFare": "SV",
-#               "class": "X",
-#               "includedCheckedBags": {
-#                 "quantity": 0
-#               }
-#             }
-#           ]
-#         }
-#       ]
-#     },
-#     {
-#       "type": "flight-offer",
-#       "id": "2",
-#       "source": "GDS",
-#       "instantTicketingRequired": false,
-#       "nonHomogeneous": false,
-#       "oneWay": false,
-#       "lastTicketingDate": "2022-10-04",
-#       "numberOfBookableSeats": 7,
-#       "itineraries": [
-#         {
-#           "duration": "PT6H19M",
-#           "segments": [
-#             {
-#               "departure": {
-#                 "iataCode": "EWR",
-#                 "terminal": "B",
-#                 "at": "2022-10-14T19:09:00"
-#               },
-#               "arrival": {
-#                 "iataCode": "SEA",
-#                 "at": "2022-10-14T22:28:00"
-#               },
-#               "carrierCode": "AS",
-#               "number": "715",
-#               "aircraft": {
-#                 "code": "7M9"
-#               },
-#               "operating": {
-#                 "carrierCode": "AS"
-#               },
-#               "duration": "PT6H19M",
-#               "id": "2",
-#               "numberOfStops": 0,
-#               "blacklistedInEU": false
-#             }
-#           ]
-#         }
-#       ],
-#       "price": {
-#         "currency": "EUR",
-#         "total": "238.46",
-#         "base": "208.00",
-#         "fees": [
-#           {
-#             "amount": "0.00",
-#             "type": "SUPPLIER"
-#           },
-#           {
-#             "amount": "0.00",
-#             "type": "TICKETING"
-#           }
-#         ],
-#         "grandTotal": "238.46"
-#       },
-#       "pricingOptions": {
-#         "fareType": [
-#           "PUBLISHED"
-#         ],
-#         "includedCheckedBagsOnly": false
-#       },
-#       "validatingAirlineCodes": [
-#         "AS"
-#       ],
-#       "travelerPricings": [
-#         {
-#           "travelerId": "1",
-#           "fareOption": "STANDARD",
-#           "travelerType": "ADULT",
-#           "price": {
-#             "currency": "EUR",
-#             "total": "238.46",
-#             "base": "208.00"
-#           },
-#           "fareDetailsBySegment": [
-#             {
-#               "segmentId": "2",
-#               "cabin": "ECONOMY",
-#               "fareBasis": "NH7OAVBN",
-#               "brandedFare": "SV",
-#               "class": "X",
-#               "includedCheckedBags": {
-#                 "quantity": 0
-#               }
-#             }
-#           ]
-#         }
-#       ]
-#     }
-#   ],
-#   "dictionaries": {
-#     "locations": {
-#       "EWR": {
-#         "cityCode": "NYC",
-#         "countryCode": "US"
-#       },
-#       "SEA": {
-#         "cityCode": "SEA",
-#         "countryCode": "US"
-#       }
-#     },
-#     "aircraft": {
-#       "7M9": "BOEING 737 MAX 9"
-#     },
-#     "currencies": {
-#       "EUR": "EURO"
-#     },
-#     "carriers": {
-#       "AS": "ALASKA AIRLINES"
-#     }
-#   }
-# }

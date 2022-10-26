@@ -10,7 +10,8 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-xl navbar-light bg-light">
+    <!-- Display FlightClub Navbar -->
+    <nav class="navbar sticky-top navbar-expand-xl navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand p-2 mb-2 bg-light text-dark" href="/"><strong>FlightClub</strong></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarBasic" aria-controls="navbarBasic" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,6 +22,9 @@
                 <ul class="navbar-nav me-auto mb-2 mb-xl-0">
                     <li class="nav-item">
                         <a class="nav-link active p-2 mb-2 bg-light text-dark" aria-current="page" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active p-2 mb-2 bg-light text-dark" aria-current="page" href="/users/{{g.user.username}}">My Personal Page</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link p-2 mb-2 bg-light text-dark" href="/login">Login</a>
@@ -39,6 +43,8 @@
         </div>
     </nav>
 
+
+    <!-- Display outstanding flashed messages -->
     <div class="container mt-5">
         {% for category, msg in get_flashed_messages(with_categories=True) %}
         <div class="alert alert-{{category}}" role="alert">
@@ -47,25 +53,11 @@
         {% endfor %}
     </div>
         
-
-    {% block content %}
-    <h1 class="display-4">Hi there, FlightClub User!</h1>
-
-    <h6><a href="/search">Take me to the flight search form</a></h6>
-
-    {% for flight in response.data %}
-    <div class="container mt-5"></div>
-        <div class="card">
-            <ul class="list-group list-group-flush">
-            <li class="list-group-item">Flight ID: {{flight.id}}</li>
-            <li class="list-group-item">One-way?: {{flight.oneWay}}</li>
-            <li class="list-group-item">How many seats available: {{flight.numberOfBookableSeats}}</li>
-            <li class="list-group-item">Total price: ${{flight.price.total}}</li>
-            </ul>
-        </div>
+    <!-- Display body content for future routes inheriting from base.html -->
+    <div class="container mt-5">
+        {% block content %}
+        {% endblock %}
     </div>
-    {% endfor %}
 
-    {% endblock %}
 </body>
 </html>

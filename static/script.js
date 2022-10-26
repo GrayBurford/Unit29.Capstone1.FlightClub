@@ -52,4 +52,4 @@ searchButton.addEventListener("click", async () => {
   // search
 });
 
-reset();
+// reset();
