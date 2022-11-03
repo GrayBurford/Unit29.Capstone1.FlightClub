@@ -6,9 +6,6 @@ db = SQLAlchemy()
 
 bcrypt = Bcrypt()
 
-# default=datetime.utcnow
-# acct_created = db.Column(db.DateTime(timezone=True), nullable=False, server_default=db.func.now())
-
 def connect_db(app):
     """Connect app to database"""
     db.app = app
@@ -30,19 +27,16 @@ class User(db.Model):
     last_name = db.Column(db.String(50), nullable=False)
     age = db.Column(db.Integer, nullable=True)
     email = db.Column(db.String(80), unique=True, nullable=False)
-    profile_pic = db.Column(db.String(1000), nullable=True, default=default_user_pic)
+    profile_pic = db.Column(db.String(1000), nullable=True, default='../static/default_user_icon.jpg')
     notes = db.Column(db.String(1000), nullable=True)
+
+    flights = db.relationship('Flight', cascade="all, delete")
 
 
     def __repr__(self):
         """Return representation of instance of User class."""
 
         return f"<User #{self.id}: {self.username}, {self.email}, {self.first_name}, {self.last_name}, {self.age}, {self.profile_pic}, {self.notes}>"
-
-    def pic_src(self):
-        """Return image for user -- user entered or default"""
-
-        return self.profile_pic or default_user_pic
 
     @classmethod
     def register(cls, username, password, first_name, last_name, age, email, profile_pic, notes):
@@ -85,16 +79,20 @@ class Flight(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
     airline_name = db.Column(db.String, nullable=False)
     airline_iata_code = db.Column(db.String(2), nullable=False) # DL, UA
-    flight_number = db.Column(db.Integer, nullable=False)
-    departure_date = db.Column(db.String(10), nullable=False) # 10-14-2022
+    flight_number = db.Column(db.Integer, nullable=False) # 1679
+    departure_date = db.Column(db.String, nullable=False) # 10-14-2022
+    departure_time = db.Column(db.String, nullable=False) # 0930
     departure_airport_code = db.Column(db.String(3), nullable=False) # EWR
+    arrival_date = db.Column(db.String, nullable=False) # 10-14-2022
+    arrival_time = db.Column(db.String, nullable=False) # 1045
     arrival_airport_code = db.Column(db.String(3), nullable=False) # ATL
     nonstop = db.Column(db.Boolean, nullable=False, default=True) # True
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     user_username = db.Column(db.String, db.ForeignKey('users.username'), nullable=False)
 
-    def __repr__(self):
-        """Return representation of instance of Trip class."""
+    user = db.relationship('User')
 
-        return f"<Trip #{self.id}: {self.airline_name}, {self.airline_iata_code}, {self.flight_number}, {self.departure_date}, {self.departure_airport_code}, {self.arrival_airport_code}, {self.nonstop}>"
+    def __repr__(self):
+        """Return representation of Flight class instance."""
+
+        return f"<Trip ID#{self.id}: {self.airline_name}, {self.airline_iata_code}, {self.flight_number}, {self.departure_date}, {self.departure_time}, {self.departure_airport_code}, {self.arrival_date}, {self.arrival_time}, {self.arrival_airport_code}, {self.nonstop}, {self.user_username}>"

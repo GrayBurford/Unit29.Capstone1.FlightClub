@@ -2,7 +2,9 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, EmailField, TextAreaField, IntegerField, DateField
 from wtforms.validators import InputRequired, Length
 
-
+###########################################################################
+# USER FORMS ##############################################################
+###########################################################################
 class RegisterUserForm(FlaskForm):
     """Form to register new user"""
 
@@ -14,13 +16,13 @@ class RegisterUserForm(FlaskForm):
     
     last_name = StringField("Last name", validators=[InputRequired(message='Enter your last name.'), Length(min=2, max=50, message='Length between 2-50 characters.')])
 
-    age = IntegerField("Age")
+    age = IntegerField("(Optional) Age")
 
     email = EmailField("Email Address", validators=[InputRequired(message='Enter your email address.'), Length(min=6, max=80, message='Length between 6-80 characters.')])
 
-    profile_pic = StringField("Profile picture")
+    profile_pic = StringField("(Optional) Profile picture")
 
-    notes = TextAreaField("Miscellaneous notes about this user")
+    notes = TextAreaField("(Optional) Miscellaneous notes about this user")
 
 
 class EditUserProfileForm(FlaskForm):
@@ -51,6 +53,9 @@ class LoginForm(FlaskForm):
     password = PasswordField("Password", validators=[InputRequired(message='Enter your password.'), Length(min=6, max=80, message='Length between 6-80 characters.')])
 
 
+###########################################################################
+# FLIGHT FORMS ############################################################
+###########################################################################
 class SearchFlightForm(FlaskForm):
     """Form for searching and generating flight info."""
 
@@ -60,6 +65,17 @@ class SearchFlightForm(FlaskForm):
 
     date = DateField("Departure Date", validators=[InputRequired(message='Please choose a departure date.')])
 
+
+
+###########################################################################
+# REWARD PROGRAM FORMS ####################################################
+###########################################################################
+
+
+
+###########################################################################
+# CREDIT CARD FORMS #######################################################
+###########################################################################
 
 
 

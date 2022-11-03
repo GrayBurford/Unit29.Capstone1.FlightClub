@@ -5,7 +5,7 @@
 {% block content %}
 
 <h1 class="display-4 text-primary text-center mt-5">*** Login to Your Account ***</h1>
-
+<hr>
 <div class="container mt-5">
     <form action="/login" method="POST">
 
@@ -23,17 +23,15 @@
 
         {% for field in form if field.widget.input_type != 'hidden'%}
         <div class="form-group row">
-            {{ field.label(class_="col-sm-2 col-form-label")}}
+        <strong>{{ field.label(class_="col-sm-2 col-form-label")}}</strong>
             <div class="col-sm-10">
-                {{ field(class_="form-control") }}
+            {{ field(class_="form-control") }}
             </div>
         </div>
         {% endfor %}
-                
-        <div class="form-group row">
-          <div class="col-sm-10 offset-sm-2">
-            <button type="submit" class="btn btn-primary">Login!</button>
-          </div>
+
+        <div class="col-12 mt-5">
+            <button class="btn btn-primary" type="submit">Login!</button>
         </div>
 
     </form>

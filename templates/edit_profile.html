@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Edit Profile{% endblock %}
 
 {% block content %}
 
-<h1 class="display-4 text-primary text-center mt-5">*** Register Your Account ***</h1>
+<h1 class="display-4 text-primary text-center mt-5">*** Update Your Profile ***</h1>
 <hr>
 <div class="container mt-5">
-    <form action="/register" method="POST">
+    <form action="/users/editprofile" method="POST">
 
         {{ form.hidden_tag() }}
 
@@ -21,9 +21,12 @@
         </div>
         {% endfor %}
 
+        <div class="alert alert-warning" role="alert">
+            Don't forget to enter your password to confirm any changes
+        </div>
         {% for field in form if field.widget.input_type != 'hidden'%}
         <div class="form-group row">
-        <strong>{{ field.label(class_="col-sm-2 col-form-label")}}</strong>
+            <strong>{{ field.label(class_="col-sm-2 col-form-label")}}</strong>
             <div class="col-sm-10">
                 {{ field(class_="form-control") }}
             </div>
@@ -31,7 +34,8 @@
         {% endfor %}
 
         <div class="col-12 mt-5">
-            <button class="btn btn-primary" type="submit">Register Account</button>
+            <button class="btn btn-primary" type="submit">Update Personal Info</button>
+            <a class="btn btn-secondary" href="/users/{{user.username}}">Go back</a>
         </div>
 
     </form>

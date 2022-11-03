@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Save Flight{% endblock %}
+
+{% block content %}
+
+<h1 class="display-6 text-primary text-center mt-5">{{ user.username }}, you just saved the following flight to your personal profile.</h1>
+
+<ul class="list-group">
+    <li class="list-group-item">{{ flight.airline_name }}</li>
+    <li class="list-group-item">{{ flight.airline_iata_code }}</li>
+    <li class="list-group-item">{{ flight.flight_number }}</li>
+    <li class="list-group-item">{{ flight.departure_date }}</li>
+    <li class="list-group-item">{{ flight.departure_time }}</li>
+    <li class="list-group-item">{{ flight.departure_airport_code }}</li>
+    <li class="list-group-item">{{ flight.arrival_date }}</li>
+    <li class="list-group-item">{{ flight.arrival_time }}</li>
+    <li class="list-group-item">{{ flight.arrival_airport_code }}</li>
+    <li class="list-group-item">{{ flight.nonstop }}</li>
+    <li class="list-group-item">{{ flight.user_username }}</li>
+</ul>
+
+<a href="/search" class="link-secondary">Go back and search for another flight!</a>
+
+<!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
+<!-- <script src="../static/js/script.js"></script> -->
+{% endblock %}
+

@@ -1,6 +1,6 @@
 from sqlalchemy.exc import IntegrityError
 from flask import Flask, redirect, render_template, flash, session, request, g, url_for
-from models import db, connect_db, User
+from models import db, connect_db, User, Flight
 from forms import RegisterUserForm, LoginForm, EditUserProfileForm, SearchFlightForm
 from flask_debugtoolbar import DebugToolbarExtension
 import os, json, requests
@@ -34,7 +34,7 @@ def get_flight_data(ori, des, date):
         "adults":"1",
         "origin_airport_code":ori,
         "destination_airport_code":des,
-        "number_of_itineraries":"10"
+        "number_of_itineraries":"99"
     }
 
     headers = {
@@ -54,6 +54,9 @@ def get_flight_data(ori, des, date):
 
     return itineraries_list
 
+
+##############################################################################
+# USER LOGIN/LOGOUT/REGISTER
 
 @app.before_request
 def add_user_to_g():
@@ -93,17 +96,17 @@ def register_user():
 
     if form.validate_on_submit():
         try:
-            username = form.username.data
-            password = form.password.data
-            first_name = form.first_name.data
-            last_name = form.last_name.data
-            age = form.age.data
-            email = form.email.data
-            profile_pic = form.profile_pic.data or User.profile_pic.default.arg
-            notes = form.notes.data
-
             # send data from WTForms to register which is a class function. Would normally make new User instance, but first need to hash pwd with register function, which returns new User instance.
-            new_user = User.register(username, password, first_name, last_name, age, email, profile_pic, notes)
+            new_user = User.register(
+                username=form.username.data, 
+                password=form.password.data, 
+                first_name=form.first_name.data, 
+                last_name=form.last_name.data, 
+                age=form.age.data, 
+                email=form.email.data, 
+                profile_pic=form.profile_pic.data or User.profile_pic.default.arg, 
+                notes=form.notes.data
+            )
             
             db.session.add(new_user)
             db.session.commit()
@@ -118,7 +121,7 @@ def register_user():
 
         flash(f"Welcome to FlightClub, {new_user.username}! Your account was created successfully!", "success")
 
-        return redirect(url_for('display_user_page', username=new_user.username))
+        return redirect(url_for('display_user_profile', username=new_user.username))
     
     else:
         return render_template('register.html', form=form)
@@ -139,7 +142,7 @@ def login():
         if user:
             do_login(user)
             flash(f"Welcome back to FlightClub, {user.username}!", "success")
-            return redirect(url_for('display_user_page', username=user.username))
+            return redirect(url_for('display_user_profile', username=user.username))
         else:
             flash("Your username or password is incorrect! Please try again.", "danger")
             return redirect(url_for('login'))
@@ -166,18 +169,77 @@ def logout():
         return redirect(url_for('login'))
 
 
-@app.route('/users/<username>', methods=['GET'])
-def display_user_page(username):
+##############################################################################
+# USER ROUTES
+
+@app.route('/users/<username>', methods=['GET', 'POST'])
+def display_user_profile(username):
     """Renders a user's personal profile page."""
 
+    if CURR_USER_ID not in session:
+        flash('Access unauthorized.', 'danger')
+        return redirect(url_for('home_page'))
+
     if not g.user:
-        flash("Access unauthorized. (from display_user_page)", "danger")
+        flash("Access unauthorized.", "danger")
         return redirect(url_for('home_page'))
 
     user = User.query.filter_by(username=username).first()
 
     return render_template('user_profile.html', user=user)
 
+
+@app.route('/users/editprofile', methods=["GET", "POST"])
+def edit_profile():
+    """Update profile for current user."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect(url_for('home_page'))
+
+    user = g.user
+
+    # Populates WTForms values with pre-existing DB info.
+    form = EditUserProfileForm(obj=user)
+
+    if form.validate_on_submit():
+        if User.authorize(user.username, form.password.data):
+            user.username = form.username.data
+            user.first_name = form.first_name.data
+            user.last_name = form.last_name.data
+            user.age = form.age.data
+            user.email = form.email.data
+            user.profile_pic = form.profile_pic.data or User.profile_pic.default.arg
+            user.notes = form.notes.data
+
+            db.session.commit()
+            return redirect(url_for('display_user_profile', username=user.username))
+
+        flash("Wrong password! Please try again.", 'danger')
+
+    return render_template('edit_profile.html', form=form, user=user)
+
+
+@app.route('/users/delete', methods=["POST"])
+def delete_user():
+    """Delete user."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect(url_for('home_page'))
+
+    flash(f"You've successfully deleted your account, user-previously-known-as '{g.user.username}'. Please consider signing up again to enjoy all FlightClub's benefits.", "danger")
+
+    do_logout()
+
+    db.session.delete(g.user)
+    db.session.commit()
+
+    return redirect(url_for('home_page'))
+
+
+##############################################################################
+# FLIGHT ROUTES
 
 @app.route('/search', methods=['GET', 'POST'])
 def flight_search():
@@ -208,7 +270,49 @@ def flight_search():
     else:
         return render_template('search.html', form=form)
 
+@app.route('/saveflight', methods=['POST'])
+def save_flight():
+    """Save a chosen flight's data to user's profile"""
 
+    if CURR_USER_ID in session:
+        user = User.query.get_or_404(session[CURR_USER_ID])
+
+    if request.method == 'POST':
+        session['airline_name'] = request.form['airline_name']
+        session['airline_iata_code'] = request.form['airline_iata_code']
+        session['flight_number'] = request.form['flight_number']
+        session['departure_date'] = request.form['departure_date']
+        session['departure_time'] = request.form['departure_time']
+        session['departure_airport_code'] = request.form['departure_airport_code']
+        session['arrival_date'] = request.form['arrival_date']
+        session['arrival_time'] = request.form['arrival_time']
+        session['arrival_airport_code'] = request.form['arrival_airport_code']
+        session['nonstop'] = request.form['nonstop']
+
+        flight = Flight(
+            airline_name=session['airline_name'],
+            airline_iata_code=session['airline_iata_code'],
+            flight_number=session['flight_number'],
+            departure_date=session['departure_date'],
+            departure_time=session['departure_time'],
+            departure_airport_code=session['departure_airport_code'],
+            arrival_date=session['arrival_date'],
+            arrival_time=session['arrival_time'],
+            arrival_airport_code=session['arrival_airport_code'],
+            nonstop=bool(session['nonstop']),
+            user_username=user.username
+        )
+
+        db.session.add(flight)
+        db.session.commit()
+        print(flight)
+
+        return render_template('add_flight.html', user=user, flight=flight)   
+    
+    else:
+        return redirect(url_for('save_flight'))
+
+    
 
 # *********************************************************************
 # RETURN DISPLAYNAME, AIRPORT IATA, STATE, ETC
