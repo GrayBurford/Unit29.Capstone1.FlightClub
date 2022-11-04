@@ -4,11 +4,7 @@ alliances = {
         "name" : "Oneworld",
         "code" : "OW",
         "members" : [
-            {"AS" : {
-                {"name" : "Alaska Airlines"},
-                {"frequent_flyer" : "ABC123"},
-                {"website" : "GOOGLE.COM"}
-            }},
+            {"AS" : "Alaska Airlines"},
             {"AA" : "American Airlines"},
             {"BA" : "British Airways"},
             {"CX" : "Cathay Pacific"},
