@@ -13,8 +13,8 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.cs
 {% block content %}
 <div class="container-sm">
 
-	<div class="alert alert-info" role="alert">
-		Please come ready with your airport's 3-digit IATA code <a href="https://www.nationsonline.org/oneworld/IATA_Codes/airport_code_list.htm" class="alert-link" target="_blank" rel="noopener noreferrer">Refer here</a> if you need additional help
+	<div class="alert alert-warning" role="alert">
+		<strong>NOTE:</strong> Please come ready with your airport's 3-digit IATA code. Refer to the third column <a href="https://www.nationsonline.org/oneworld/IATA_Codes/airport_code_list.htm" class="alert-link" target="_blank" rel="noopener noreferrer">here</a> if you need additional help.
 	</div>
 
 	<!-- Begin card to contain origin/destination -->
@@ -172,42 +172,47 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.cs
 		{% for itin in itins %}
 		<div class="col">
 			<div class="card">
-				<img src="https://w7.pngwing.com/pngs/545/859/png-transparent-delta-flight-museum-atlanta-delta-air-lines-airplane-airline-angle-triangle-logo-thumbnail.png" class="card-img-top img-thumbnail" alt="card-grid-image">
+				<img src="/static/pics/logos/{{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['marketing_airline_code'] }}_name.png" class="card-img" alt="card-img-overlay">
+				<!-- <img src="https://w7.pngwing.com/pngs/545/859/png-transparent-delta-flight-museum-atlanta-delta-air-lines-airplane-airline-angle-triangle-logo-thumbnail.png" class="card-img-top img-thumbnail" alt="card-grid-image"> -->
 				<div class="card-body">
-					<h5 class="card-title">{{ itin['info']['marketing_airline'] }}: Flight #{{ itin['info']['marketing_airline_code'] }}{{ itin['info']['flight_number'] }}</h5>
+					<h5 class="card-title">{{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['marketing_airline'] }}: Flight #{{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['marketing_airline_code'] }}{{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['flight_number'] }}</h5>
 					<ul class="list-group list-group-flush">
-						<li class="list-group-item">Cabin Class: {{ itin['info']['cabin_name'] }}</li>
-						<li class="list-group-item">Airline: {{ itin['info']['marketing_airline'] }}</li>
-						<li class="list-group-item">Airline Code: {{ itin['info']['marketing_airline_code'] }}</li>
-						<li class="list-group-item">Flight Number: {{ itin['info']['flight_number'] }}</li>
-						<li class="list-group-item">Flight duration: {{ itin['info']['duration'] }}</li>
-						<li class="list-group-item">Departs {{ itin['departure']['airport']['name'] }} ({{ itin['departure']['airport']['code'] }}) at: {{ itin['departure']['datetime']['time_12h'] }} on {{ itin['departure']['datetime']['date_display'] }}</li>
-						<li class="list-group-item">Arrives {{ itin['arrival']['airport']['name'] }} ({{ itin['arrival']['airport']['code'] }}) at: {{ itin['arrival']['datetime']['time_12h'] }} on {{ itin['arrival']['datetime']['date_display'] }}</li>
+						<li class="list-group-item">Cabin Class: {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['cabin_name'] }}</li>
+						<li class="list-group-item">Airline: {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['marketing_airline'] }}</li>
+						<li class="list-group-item">Airline Code: {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['marketing_airline_code'] }}</li>
+						<li class="list-group-item">Flight Number: {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['flight_number'] }}</li>
+						<li class="list-group-item">Flight duration: {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['duration'] }}</li>
+						<li class="list-group-item">Departs {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['departure']['airport']['name'] }} ({{ itin['slice_data']['slice_0']['flight_data']['flight_0']['departure']['airport']['code'] }}) at: {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['departure']['datetime']['time_12h'] }} on {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['departure']['datetime']['date_display'] }}</li>
+						<li class="list-group-item">Arrives {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['arrival']['airport']['name'] }} ({{ itin['slice_data']['slice_0']['flight_data']['flight_0']['arrival']['airport']['code'] }}) at: {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['arrival']['datetime']['time_12h'] }} on {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['arrival']['datetime']['date_display'] }}</li>
+						<li class="list-group-item">Total price: ${{ itin['price_details']['display_total_fare_per_ticket'] }}</li>
 					</ul>
 				</div>
+
 				<!-- Button that submits hidden form inputs back to Flask to populate SESSION -->
 				<div class="card-footer">
 					<form action="/saveflight" method="POST">
 						<input type="hidden" name="airline_name" 
-							value="{{ itin['info']['marketing_airline'] }}">
+							value="{{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['marketing_airline'] }}">
 						<input type="hidden" name="airline_iata_code" 
-							value="{{ itin['info']['marketing_airline_code'] }}">
+							value="{{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['marketing_airline_code'] }}">
 						<input type="hidden" name="flight_number" 
-							value="{{ itin['info']['flight_number'] }}">
+							value="{{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['flight_number'] }}">
 						<input type="hidden" name="departure_date" 
-							value="{{ itin['departure']['datetime']['date_display'] }}">
+							value="{{ itin['slice_data']['slice_0']['flight_data']['flight_0']['departure']['datetime']['date_display'] }}">
 						<input type="hidden" name="departure_time" 
-							value="{{ itin['departure']['datetime']['time_12h'] }}">
+							value="{{ itin['slice_data']['slice_0']['flight_data']['flight_0']['departure']['datetime']['time_12h'] }}">
 						<input type="hidden" name="departure_airport_code" 
-							value="{{ itin['departure']['airport']['code'] }}">
+							value="{{ itin['slice_data']['slice_0']['flight_data']['flight_0']['departure']['airport']['code'] }}">
 						<input type="hidden" name="arrival_date" 
-							value="{{ itin['arrival']['datetime']['date_display'] }}">
+							value="{{ itin['slice_data']['slice_0']['flight_data']['flight_0']['arrival']['datetime']['date_display'] }}">
 						<input type="hidden" name="arrival_time" 
-							value="{{ itin['arrival']['datetime']['time_12h'] }}">
+							value="{{ itin['slice_data']['slice_0']['flight_data']['flight_0']['arrival']['datetime']['time_12h'] }}">
 						<input type="hidden" name="arrival_airport_code" 
-							value="{{ itin['arrival']['airport']['code'] }}">
+							value="{{ itin['slice_data']['slice_0']['flight_data']['flight_0']['arrival']['airport']['code'] }}">
 						<input type="hidden" name="nonstop" 
 							value="True">
+						<input type="hidden" name="price" 
+							value="{{ itin['price_details']['display_total_fare_per_ticket'] }}">
 						<button class="btn btn-success" type="submit">Choose this flight!</button>
 					</form>
 				</div>

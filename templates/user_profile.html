@@ -25,6 +25,7 @@
 
 <form method="POST" action="/users/delete" class="form-inline">
     <a class="btn btn-secondary" href="/users/editprofile">Edit your profile info here</a>
+    <a class="btn btn-info" href="/users/{{ user.username }}/rewards">Airline Reward Programs</a>
     <button class="btn btn-danger">Delete Profile</button>
 </form>
 
@@ -32,9 +33,14 @@
 
 {% if user.flights %}
     <h1 class="display-6">{{ user.username }}'s saved flights:</h1>
-    <ul class="list-group mb-5">
+    <ul class="list-group list-group-numbered mb-5">
         {% for flight in user.flights %}
-        <li class="list-group-item">{{ flight.airline_name }} -- {{ flight.airline_iata_code }} -- {{ flight.flight_number }}</li>
+        <li class="list-group-item">
+            ID: {{ flight.id }} -- {{ flight.airline_name }} -- {{ flight.airline_iata_code }} {{ flight.flight_number }}
+            <span class="badge bg-danger">
+                <a href="/flight/{{flight.id}}/delete" class="text-decoration-none text-white">Delete</a>
+            </span>
+        </li>
         {% endfor %}
     </ul>
 {% endif %}

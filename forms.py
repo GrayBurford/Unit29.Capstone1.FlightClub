@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, EmailField, TextAreaField, IntegerField, DateField
+from wtforms import StringField, PasswordField, EmailField, TextAreaField, IntegerField, DateField, SelectField
 from wtforms.validators import InputRequired, Length
 
 ###########################################################################
@@ -71,6 +71,15 @@ class SearchFlightForm(FlaskForm):
 # REWARD PROGRAM FORMS ####################################################
 ###########################################################################
 
+class AddRewardProgramForm(FlaskForm):
+    """Form to add new airline reward program to user profile."""
+
+    oneworld = SelectField('Oneworld Members')
+    staralliance = SelectField('Star Alliance Members')
+    skyteam = SelectField('Sky Team Members')
+
+    acct_number = StringField("Account Number", validators=[InputRequired(message='Please enter the program\'s account number')])
+    notes = StringField("Additional Notes")
 
 
 ###########################################################################

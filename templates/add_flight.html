@@ -17,10 +17,12 @@
     <li class="list-group-item">{{ flight.arrival_time }}</li>
     <li class="list-group-item">{{ flight.arrival_airport_code }}</li>
     <li class="list-group-item">{{ flight.nonstop }}</li>
+    <li class="list-group-item">{{ flight.price }}</li>
     <li class="list-group-item">{{ flight.user_username }}</li>
 </ul>
-
-<a href="/search" class="link-secondary">Go back and search for another flight!</a>
+<hr>
+<a href="/search" class="btn btn-secondary">Search for another flight!</a>
+<a href="/users/{{user.username}}" class="btn btn-info">My Profile</a>
 
 <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
 <!-- <script src="../static/js/script.js"></script> -->

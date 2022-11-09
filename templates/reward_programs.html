@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %} Rewards {% endblock %}
+
+{% block content %}
+
+<h1 class="display-6 text-primary text-center mt-5">*** Add a new Frequent Flyer program to your account, <strong>{{ user.username }}</strong>! ***</h1>
+
+<hr>
+
+<div class="alert alert-warning" role="alert">
+    <strong>NOTE:</strong> Please select only one Airline Program below, and enter your account # with that airline to continue.
+</div>
+
+<div class="container mt-5">
+    <form action="/users/<username>/rewards" method="POST">
+
+        {{ form.hidden_tag() }}
+
+        {% for field in form.errors %}
+        <div class="alert alert-danger">{{field}}
+            <ul>
+                {% for error in form.errors[field] %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+
+        {% for field in form if field.widget.input_type != 'hidden'%}
+        <div class="form-group row">
+        <strong>{{ field.label(class_="col-sm-2 col-form-label")}}</strong>
+            <div class="col-sm-10">
+            {{ field(class_="form-control") }}
+            </div>
+        </div>
+        {% endfor %}
+
+        <hr>
+
+        <div class="col-12 mt-5">
+            <button class="btn btn-primary" type="submit">Add Program!</button>
+        </div>
+
+    </form>
+
+    <hr>
+
+    {% if user.user_airlines %}
+        <h1 class="display-6">{{ user.username }}'s saved airline frequent flyer programs:</h1>
+        <hr>
+        <ul class="list-group list-group-numbered mb-5">
+            {% for program in user.user_airlines %}
+            <li class="list-group-item">
+                User ID: {{ program.user_id }}
+                Airline ID: {{ program.airline_id }}
+                Account #: {{ program.acct_number }}
+                <!-- Is user_airlines a list []? for loop? -->
+                Name & Program: {{ program.airlines.name }} -- {{ program.airlines.reward_program }}
+                <span class="badge bg-danger">
+                    <a href="/rewards/{{user.id}}/{{program.airline_id}}/delete" class="text-decoration-none text-white">Delete</a>
+                </span>
+            </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+</div>
+
+
+  
+{% endblock %}

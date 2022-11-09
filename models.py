@@ -32,8 +32,7 @@ class User(db.Model):
 
     flights = db.relationship('Flight', cascade="all, delete")
 
-    airlines = db.relationship('Airline', secondary="users_airlines")
-
+    user_airlines = db.relationship('UserAirline', backref='users')
 
     def __repr__(self):
         """Return representation of instance of User class."""
@@ -89,6 +88,7 @@ class Flight(db.Model):
     arrival_time = db.Column(db.String, nullable=False) # 1045
     arrival_airport_code = db.Column(db.String(3), nullable=False) # ATL
     nonstop = db.Column(db.Boolean, nullable=False, default=True) # True
+    price = db.Column(db.Float(decimal_return_scale=2), nullable=False) # 98.16
 
     user_username = db.Column(db.String, db.ForeignKey('users.username'), nullable=False)
 
@@ -108,14 +108,13 @@ class Airline(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
     name = db.Column(db.String, nullable=False)
     iata_code = db.Column(db.String(2), nullable=False)
-    reward_program = db.Column(db.String, nullable=True)
-    alliance = db.Column(db.String, nullable=True)
+    reward_program = db.Column(db.String, nullable=False)
+    alliance = db.Column(db.String, nullable=False)
     logo = db.Column(db.String, nullable=True)
     symbol = db.Column(db.String, nullable=True)
     url = db.Column(db.String, nullable=True)
 
-    users = db.relationship('User', secondary="users_airlines")
-
+    user_airlines = db.relationship('UserAirline', backref='airlines')
 
 class UserAirline(db.Model):
     """Create model instance of UserAirlines class."""
@@ -124,3 +123,6 @@ class UserAirline(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     airline_id = db.Column(db.Integer, db.ForeignKey('airlines.id'), primary_key=True)
+    acct_number = db.Column(db.String, nullable=False)
+    notes = db.Column(db.String, nullable=True)
+

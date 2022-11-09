@@ -1,7 +1,7 @@
 from sqlalchemy.exc import IntegrityError
 from flask import Flask, redirect, render_template, flash, session, request, g, url_for
-from models import db, connect_db, User, Flight
-from forms import RegisterUserForm, LoginForm, EditUserProfileForm, SearchFlightForm
+from models import db, connect_db, User, Flight, Airline, UserAirline
+from forms import RegisterUserForm, LoginForm, EditUserProfileForm, SearchFlightForm, AddRewardProgramForm
 from flask_debugtoolbar import DebugToolbarExtension
 import os, json, requests
 from secret import API_KEY
@@ -48,9 +48,11 @@ def get_flight_data(ori, des, date):
 
     itineraries_list = []
 
+    # Filters out nonstop flights from flights with a layover
     for itin in itineraries:
         if itineraries[itin]['slice_data']['slice_0']['info']['connection_count'] == 0:
-            itineraries_list.append(itineraries[itin]['slice_data']['slice_0']['flight_data']['flight_0'])
+            itineraries_list.append(itineraries[itin])
+            # itineraries_list.append(itineraries[itin]['slice_data']['slice_0']['flight_data']['flight_0'])
 
     return itineraries_list
 
@@ -111,7 +113,8 @@ def register_user():
             db.session.add(new_user)
             db.session.commit()
 
-        except IntegrityError:
+        except IntegrityError as err:
+            print(err)
             flash('Username or E-Mail address is already taken! Please choose again.', 'danger')
             return render_template('register.html', form=form)
 
@@ -131,24 +134,28 @@ def register_user():
 def login():
     """Render login form, or log a user in."""
 
+    airlines = Airline.query.all()
+
     if g.user:
         flash(f'You are already logged in as {g.user.username}! Logout first if you want to log in as a different user.', "danger")
 
     form = LoginForm()
 
     if form.validate_on_submit():
-        user = User.authorize(form.username.data, form.password.data)
+        try:
+            user = User.authorize(form.username.data, form.password.data)
 
-        if user:
-            do_login(user)
-            flash(f"Welcome back to FlightClub, {user.username}!", "success")
-            return redirect(url_for('display_user_profile', username=user.username))
-        else:
+            if user:
+                do_login(user)
+                flash(f"Welcome back to FlightClub, {user.username}!", "success")
+                return redirect(url_for('display_user_profile', username=user.username))
+        except IntegrityError as err:
+            print(err)
             flash("Your username or password is incorrect! Please try again.", "danger")
             return redirect(url_for('login'))
 
     else:
-        return render_template('login.html', form=form)
+        return render_template('login.html', form=form, airlines=airlines)
 
 
 @app.route('/logout', methods=['GET'])
@@ -168,6 +175,12 @@ def logout():
         flash("You can't logout, because you're not logged in!", "warning")
         return redirect(url_for('login'))
 
+
+@app.route('/faq', methods=['GET'])
+def faq():
+    """Render FAQ page."""
+
+    return render_template('faq.html')
 
 ##############################################################################
 # USER ROUTES
@@ -203,19 +216,21 @@ def edit_profile():
     form = EditUserProfileForm(obj=user)
 
     if form.validate_on_submit():
-        if User.authorize(user.username, form.password.data):
-            user.username = form.username.data
-            user.first_name = form.first_name.data
-            user.last_name = form.last_name.data
-            user.age = form.age.data
-            user.email = form.email.data
-            user.profile_pic = form.profile_pic.data or User.profile_pic.default.arg
-            user.notes = form.notes.data
+        try:
+            if User.authorize(user.username, form.password.data):
+                user.username = form.username.data
+                user.first_name = form.first_name.data
+                user.last_name = form.last_name.data
+                user.age = form.age.data
+                user.email = form.email.data
+                user.profile_pic = form.profile_pic.data or User.profile_pic.default.arg
+                user.notes = form.notes.data
 
-            db.session.commit()
-            return redirect(url_for('display_user_profile', username=user.username))
-
-        flash("Wrong password! Please try again.", 'danger')
+                db.session.commit()
+                return redirect(url_for('display_user_profile', username=user.username))
+        except IntegrityError as err:
+            print(err)
+            flash("Wrong password! Please try again.", 'danger')
 
     return render_template('edit_profile.html', form=form, user=user)
 
@@ -238,6 +253,69 @@ def delete_user():
     return redirect(url_for('home_page'))
 
 
+@app.route('/users/<username>/rewards', methods=['GET', 'POST'])
+def airline_programs(username):
+    """Render page to add/edit/remove airline frequent flyer accounts."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect(url_for('home_page'))
+
+    user = g.user
+
+    form = AddRewardProgramForm()
+
+    ow = [(0, '-- select an airline --')] + [(a.id, f'{a.name} ({a.reward_program})') for a in Airline.query.filter_by(alliance='Oneworld').all()]
+
+    st = [(0, '-- select an airline --')] + [(a.id, f'{a.name} ({a.reward_program})') for a in Airline.query.filter_by(alliance='Sky Team').all()]
+    
+    sa = [(0, '-- select an airline --')] + [(a.id, f'{a.name} ({a.reward_program})') for a in Airline.query.filter_by(alliance='Star Alliance').all()]
+
+    form.oneworld.choices = ow
+    form.skyteam.choices = st
+    form.staralliance.choices = sa
+
+    if form.validate_on_submit():
+        try:
+            NOT_ZERO_ID = int(form.oneworld.data) or int(form.skyteam.data) or int(form.staralliance.data)
+            print(form.oneworld.data)
+            print(form.skyteam.data)
+            print(form.staralliance.data)
+
+            new_program = UserAirline(
+                user_id=user.id, 
+                airline_id=NOT_ZERO_ID, 
+                acct_number=form.acct_number.data
+            )
+
+            db.session.add(new_program)
+            db.session.commit()
+
+            return redirect(url_for('airline_programs', user=user, username=username, form=form))
+
+        except IntegrityError as err:
+            print(err)
+            flash('Something went wrong. Please check your selections.', 'danger')
+
+    return render_template('reward_programs.html', form=form, user=user, username=username)
+
+
+@app.route('/flight/<int:flight_id>/delete', methods=["GET"])
+def delete_flight(flight_id):
+    """Delete a user's saved flight."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect(url_for('home_page'))
+
+    flight = Flight.query.get_or_404(flight_id)
+    db.session.delete(flight)
+    db.session.commit()
+
+    flash("You successfully deleted that saved flight", "success")    
+    return redirect(f'/users/{g.user.username}')
+
+
 ##############################################################################
 # FLIGHT ROUTES
 
@@ -247,28 +325,27 @@ def flight_search():
 
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/")
-
-    # itins = get_flight_data("EWR", "ATL", "2022-11-21")
-
-    # if request.method == 'POST':
-    #     something = request.form['something']
+        return redirect(url_for('home_page'))
 
     form = SearchFlightForm()
 
     if form.validate_on_submit():
-        origin = form.data['origin']
-        destination = form.data['destination']
-        date = form.data['date']
-        print(f"origin = {origin}, destination = {destination}, date = {date}")
+        try:
+            origin = form.data['origin']
+            destination = form.data['destination']
+            date = form.data['date']
+            print(f"origin = {origin}, destination = {destination}, date = {date}")
 
-        itins = get_flight_data(origin, destination, date)
+            itins = get_flight_data(origin, destination, date)
+            # EX: itins = get_flight_data("EWR", "ATL", "2022-11-21")
 
-        flash(f"Seach successful and results compiled for viewing below.", "success")
-        return render_template('search.html', form=form, itins=itins)
+            flash(f"Seach successful and results compiled for viewing below.", "success")
+            return render_template('search.html', form=form, itins=itins)
+        except IntegrityError as err:
+            print(err)
+            flash('Please fill in the required fields: Origin, Destination, and Date', 'danger')
 
-    else:
-        return render_template('search.html', form=form)
+    return render_template('search.html', form=form)
 
 @app.route('/saveflight', methods=['POST'])
 def save_flight():
@@ -288,6 +365,7 @@ def save_flight():
         session['arrival_time'] = request.form['arrival_time']
         session['arrival_airport_code'] = request.form['arrival_airport_code']
         session['nonstop'] = request.form['nonstop']
+        session['price'] = request.form['price']
 
         flight = Flight(
             airline_name=session['airline_name'],
@@ -300,6 +378,7 @@ def save_flight():
             arrival_time=session['arrival_time'],
             arrival_airport_code=session['arrival_airport_code'],
             nonstop=bool(session['nonstop']),
+            price=session['price'],
             user_username=user.username
         )
 
@@ -312,6 +391,29 @@ def save_flight():
     else:
         return redirect(url_for('save_flight'))
 
+
+@app.route('/rewards/<int:user_id>/<int:airline_id>/delete', methods=["GET"])
+def delete_program(user_id, airline_id):
+    """Delete a user's saved airline reward program."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect(url_for('home_page'))
+
+    user = g.user
+    
+    try:
+        program = UserAirline.query.filter_by(user_id=1, airline_id=4).one()
+        print(program)
+
+        db.session.delete(program)
+        db.session.commit()
+    except IntegrityError as err:
+        print(err)
+        flash('Cannot delete this program.', 'danger')
+
+    flash("You successfully deleted that saved airline program", "success")    
+    return redirect(f'/users/{user.username}/rewards')
     
 
 # *********************************************************************

@@ -15,8 +15,8 @@ a1 = Airline(
     iata_code="AS",
     reward_program="Mileage Plan",
     alliance="Oneworld",
-    logo="static/pics/logos/AS_logo.png",
-    symbol="static/pics/logos/AS_name.png",
+    logo="/static/pics/logos/AS_name.png",
+    symbol="/static/pics/logos/AS_logo.png",
     url="https://www.alaskaair.com/"
 )
 a2 = Airline(
@@ -24,8 +24,8 @@ a2 = Airline(
     iata_code="AA",
     reward_program="AAdvantage",
     alliance="Oneworld",
-    logo="static/pics/logos/AA_logo.png",
-    symbol="static/pics/logos/AA_name.png",
+    logo="/static/pics/logos/AA_name.png",
+    symbol="/static/pics/logos/AA_logo.png",
     url="https://www.aa.com/homePage.do"
 )
 a3 = Airline(
@@ -33,8 +33,8 @@ a3 = Airline(
     iata_code="BA",
     reward_program="Executive Club",
     alliance="Oneworld",
-    logo="static/pics/logos/BA_logo.png",
-    symbol="static/pics/logos/BA_name.png",
+    logo="/static/pics/logos/BA_name.png",
+    symbol="/static/pics/logos/BA_logo.png",
     url="https://www.britishairways.com/travel/home/public/en_us/"
 )
 a4 = Airline(
@@ -42,8 +42,8 @@ a4 = Airline(
     iata_code="CX",
     reward_program="Cathay",
     alliance="Oneworld",
-    logo="static/pics/logos/CX_logo.png",
-    symbol="static/pics/logos/CX_name.png",
+    logo="/static/pics/logos/CX_name.png",
+    symbol="/static/pics/logos/CX_logo.png",
     url="https://www.cathaypacific.com/cx/en_US.html"
 )
 a5 = Airline(
@@ -51,8 +51,8 @@ a5 = Airline(
     iata_code="AY",
     reward_program="Finnair Plus",
     alliance="Oneworld",
-    logo="static/pics/logos/AY_logo.png",
-    symbol="static/pics/logos/AY_name.png",
+    logo="/static/pics/logos/AY_name.png",
+    symbol="/static/pics/logos/AY_logo.png",
     url="https://www.finnair.com/us-en/finnair-plus"
 )
 a6 = Airline(
@@ -60,8 +60,8 @@ a6 = Airline(
     iata_code="IB",
     reward_program="Iberia Plus",
     alliance="Oneworld",
-    logo="static/pics/logos/IB_logo.png",
-    symbol="static/pics/logos/IB_name.png",
+    logo="/static/pics/logos/IB_name.png",
+    symbol="/static/pics/logos/IB_logo.png",
     url="https://www.iberia.com/us/all-iberiaplus/"
 )
 a7 = Airline(
@@ -69,8 +69,8 @@ a7 = Airline(
     iata_code="JL",
     reward_program="Mileage Bank",
     alliance="Oneworld",
-    logo="static/pics/logos/JL_logo.png",
-    symbol="static/pics/logos/JL_name.png",
+    logo="/static/pics/logos/JL_name.png",
+    symbol="/static/pics/logos/JL_logo.png",
     url="https://www.jal.co.jp/jp/en/jalmile/flyon/guide.html"
 )
 a8 = Airline(
@@ -78,8 +78,8 @@ a8 = Airline(
     iata_code="MH",
     reward_program="Enrich",
     alliance="Oneworld",
-    logo="static/pics/logos/MH_logo.png",
-    symbol="static/pics/logos/MH_name.png",
+    logo="/static/pics/logos/MH_name.png",
+    symbol="/static/pics/logos/MH_logo.png",
     url="https://www.malaysiaairlines.com/hq/en.html"
 )
 a9 = Airline(
@@ -87,8 +87,8 @@ a9 = Airline(
     iata_code="QF",
     reward_program="Frequent Flyer",
     alliance="Oneworld",
-    logo="static/pics/logos/QF_logo.png",
-    symbol="static/pics/logos/QF_name.png",
+    logo="/static/pics/logos/QF_name.png",
+    symbol="/static/pics/logos/QF_logo.png",
     url="https://www.qantas.com/us/en/frequent-flyer/discover-and-join/join.html"
 )
 a10 = Airline(
@@ -96,8 +96,8 @@ a10 = Airline(
     iata_code="QR",
     reward_program="Privilege Club",
     alliance="Oneworld",
-    logo="static/pics/logos/QR_logo.png",
-    symbol="static/pics/logos/QR_name.png",
+    logo="/static/pics/logos/QR_name.png",
+    symbol="/static/pics/logos/QR_logo.png",
     url="https://www.qatarairways.com/en/homepage.html"
 )
 a11 = Airline(
@@ -105,8 +105,8 @@ a11 = Airline(
     iata_code="AT",
     reward_program="Safar Flyer",
     alliance="Oneworld",
-    logo="static/pics/logos/AT_logo.png",
-    symbol="static/pics/logos/AT_name.png",
+    logo="/static/pics/logos/AT_name.png",
+    symbol="/static/pics/logos/AT_logo.png",
     url="https://www.royalairmaroc.com/us-en/home"
 )
 a12 = Airline(
@@ -114,8 +114,8 @@ a12 = Airline(
     iata_code="RJ",
     reward_program="Royal Club",
     alliance="Oneworld",
-    logo="static/pics/logos/RJ_logo.png",
-    symbol="static/pics/logos/RJ_name.png",
+    logo="/static/pics/logos/RJ_name.png",
+    symbol="/static/pics/logos/RJ_logo.png",
     url="https://www.rj.com/en"
 )
 a13 = Airline(
@@ -123,8 +123,8 @@ a13 = Airline(
     iata_code="UL",
     reward_program="Fly SmiLes",
     alliance="Oneworld",
-    logo="static/pics/logos/UL_logo.png",
-    symbol="static/pics/logos/UL_name.png",
+    logo="/static/pics/logos/UL_name.png",
+    symbol="/static/pics/logos/UL_logo.png",
     url="https://www.srilankan.com/flysmiles/home/register"
 )
 a14 = Airline(
@@ -132,8 +132,8 @@ a14 = Airline(
     iata_code="FJ",
     reward_program="Tabua Club",
     alliance="Oneworld",
-    logo="static/pics/logos/FJ_logo.png",
-    symbol="static/pics/logos/FJ_name.png",
+    logo="/static/pics/logos/FJ_name.png",
+    symbol="/static/pics/logos/FJ_logo.png",
     url="https://www.fijiairways.com/en-us/"
 )
 a15 = Airline(
@@ -141,8 +141,8 @@ a15 = Airline(
     iata_code="WY",
     reward_program="Sinbad",
     alliance="Oneworld",
-    logo="static/pics/logos/WY_logo.png",
-    symbol="static/pics/logos/WY_name.png",
+    logo="/static/pics/logos/WY_name.png",
+    symbol="/static/pics/logos/WY_logo.png",
     url="https://sindbad.omanair.com/"
 )
 
@@ -152,8 +152,8 @@ a16 = Airline(
     iata_code="A3",
     reward_program="Miles & Bonus",
     alliance="Star Alliance",
-    logo="static/pics/logos/A3_logo.png",
-    symbol="static/pics/logos/A3_name.png",
+    logo="/static/pics/logos/A3_name.png",
+    symbol="/static/pics/logos/A3_logo.png",
     url="https://en.aegeanair.com/milesandbonus/"
 )
 a17 = Airline(
@@ -161,8 +161,8 @@ a17 = Airline(
     iata_code="AC",
     reward_program="Aeroplan",
     alliance="Star Alliance",
-    logo="static/pics/logos/AC_logo.png",
-    symbol="static/pics/logos/AC_name.png",
+    logo="/static/pics/logos/AC_name.png",
+    symbol="/static/pics/logos/AC_logo.png",
     url="https://www.aircanada.com/ca/en/aco/home/aeroplan.html"
 )
 a18 = Airline(
@@ -170,8 +170,8 @@ a18 = Airline(
     iata_code="CA",
     reward_program="Phoenix Miles",
     alliance="Star Alliance",
-    logo="static/pics/logos/CA_logo.png",
-    symbol="static/pics/logos/CA_name.png",
+    logo="/static/pics/logos/CA_name.png",
+    symbol="/static/pics/logos/CA_logo.png",
     url="https://www.airchina.us/US/GB/phoenix-miles/"
 )
 a19 = Airline(
@@ -179,8 +179,8 @@ a19 = Airline(
     iata_code="AI",
     reward_program="Flying Returns",
     alliance="Star Alliance",
-    logo="static/pics/logos/AI_logo.png",
-    symbol="static/pics/logos/AI_name.png",
+    logo="/static/pics/logos/AI_name.png",
+    symbol="/static/pics/logos/AI_logo.png",
     url="https://www.airindia.in/about-flying-returns-new.htm"
 )
 a20 = Airline(
@@ -188,8 +188,8 @@ a20 = Airline(
     iata_code="NZ",
     reward_program="Airpoints",
     alliance="Star Alliance",
-    logo="static/pics/logos/NZ_logo.png",
-    symbol="static/pics/logos/NZ_name.png",
+    logo="/static/pics/logos/NZ_name.png",
+    symbol="/static/pics/logos/NZ_logo.png",
     url="https://www.airnewzealand.com/ord"
 )
 a21 = Airline(
@@ -197,8 +197,8 @@ a21 = Airline(
     iata_code="NH",
     reward_program="ANA Mileage Club",
     alliance="Star Alliance",
-    logo="static/pics/logos/NH_logo.png",
-    symbol="static/pics/logos/NH_name.png",
+    logo="/static/pics/logos/NH_name.png",
+    symbol="/static/pics/logos/NH_logo.png",
     url="https://www.ana.co.jp/en/us/amc/"
 )
 a22 = Airline(
@@ -206,8 +206,8 @@ a22 = Airline(
     iata_code="OZ",
     reward_program="Asiana Club",
     alliance="Star Alliance",
-    logo="static/pics/logos/OZ_logo.png",
-    symbol="static/pics/logos/OZ_name.png",
+    logo="/static/pics/logos/OZ_name.png",
+    symbol="/static/pics/logos/OZ_logo.png",
     url="https://flyasiana.com/C/US/EN/index?site_preference=NORMAL"
 )
 a23 = Airline(
@@ -215,8 +215,8 @@ a23 = Airline(
     iata_code="OS",
     reward_program="Miles & More",
     alliance="Star Alliance",
-    logo="static/pics/logos/OS_logo.png",
-    symbol="static/pics/logos/OS_name.png",
+    logo="/static/pics/logos/OS_name.png",
+    symbol="/static/pics/logos/OS_logo.png",
     url="https://www.austrian.com/us/en/miles-and-more"
 )
 a24 = Airline(
@@ -224,8 +224,8 @@ a24 = Airline(
     iata_code="AV",
     reward_program="Life Miles",
     alliance="Star Alliance",
-    logo="static/pics/logos/AV_logo.png",
-    symbol="static/pics/logos/AV_name.png",
+    logo="/static/pics/logos/AV_name.png",
+    symbol="/static/pics/logos/AV_logo.png",
     url="https://www.avianca.com/us/en/experience/lifemiles-program/"
 )
 a25 = Airline(
@@ -233,8 +233,8 @@ a25 = Airline(
     iata_code="SN",
     reward_program="Miles & More",
     alliance="Star Alliance",
-    logo="static/pics/logos/SN_logo.png",
-    symbol="static/pics/logos/SN_name.png",
+    logo="/static/pics/logos/SN_name.png",
+    symbol="/static/pics/logos/SN_logo.png",
     url="https://www.brusselsairlines.com/us/en/contact/feedback/general/loyalty-programs"
 )
 a26 = Airline(
@@ -242,8 +242,8 @@ a26 = Airline(
     iata_code="CM",
     reward_program="Connect Miles",
     alliance="Star Alliance",
-    logo="static/pics/logos/CM_logo.png",
-    symbol="static/pics/logos/CM_name.png",
+    logo="/static/pics/logos/CM_name.png",
+    symbol="/static/pics/logos/CM_logo.png",
     url="https://www.copaair.com/en/web/us/enrollment"
 )
 a27 = Airline(
@@ -251,8 +251,8 @@ a27 = Airline(
     iata_code="OU",
     reward_program="Miles & More",
     alliance="Star Alliance",
-    logo="static/pics/logos/OU_logo.png",
-    symbol="static/pics/logos/OU_name.png",
+    logo="/static/pics/logos/OU_name.png",
+    symbol="/static/pics/logos/OU_logo.png",
     url="https://www.croatiaairlines.com/miles-and-more"
 )
 a28 = Airline(
@@ -260,8 +260,8 @@ a28 = Airline(
     iata_code="MS",
     reward_program="EgyptAir Plus",
     alliance="Star Alliance",
-    logo="static/pics/logos/MS_logo.png",
-    symbol="static/pics/logos/MS_name.png",
+    logo="/static/pics/logos/MS_name.png",
+    symbol="/static/pics/logos/MS_logo.png",
     url="https://www.egyptairplus.com/MS_Member_WebSite/frequent.jsp"
 )
 a29 = Airline(
@@ -269,8 +269,8 @@ a29 = Airline(
     iata_code="ET",
     reward_program="Sheba Miles",
     alliance="Star Alliance",
-    logo="static/pics/logos/ET_logo.png",
-    symbol="static/pics/logos/ET_name.png",
+    logo="/static/pics/logos/ET_name.png",
+    symbol="/static/pics/logos/ET_logo.png",
     url="https://www.ethiopianairlines.com/US/en"
 )
 a30 = Airline(
@@ -278,8 +278,8 @@ a30 = Airline(
     iata_code="BR",
     reward_program="Infinity MileageLands",
     alliance="Star Alliance",
-    logo="static/pics/logos/BR_logo.png",
-    symbol="static/pics/logos/BR_name.png",
+    logo="/static/pics/logos/BR_name.png",
+    symbol="/static/pics/logos/BR_logo.png",
     url="https://www.evaair.com/en-us/index.html"
 )
 a31 = Airline(
@@ -287,8 +287,8 @@ a31 = Airline(
     iata_code="LO",
     reward_program="Miles & More",
     alliance="Star Alliance",
-    logo="static/pics/logos/LO_logo.png",
-    symbol="static/pics/logos/LO_name.png",
+    logo="/static/pics/logos/LO_name.png",
+    symbol="/static/pics/logos/LO_logo.png",
     url="https://www.lot.com/us/en"
 )
 a32 = Airline(
@@ -296,8 +296,8 @@ a32 = Airline(
     iata_code="LH",
     reward_program="Miles & More",
     alliance="Star Alliance",
-    logo="static/pics/logos/LH_logo.png",
-    symbol="static/pics/logos/LH_name.png",
+    logo="/static/pics/logos/LH_name.png",
+    symbol="/static/pics/logos/LH_logo.png",
     url="https://www.lufthansa.com/br/en/homepage"
 )
 a33 = Airline(
@@ -305,8 +305,8 @@ a33 = Airline(
     iata_code="SK",
     reward_program="EuroBonus",
     alliance="Star Alliance",
-    logo="static/pics/logos/SK_logo.png",
-    symbol="static/pics/logos/SK_name.png",
+    logo="/static/pics/logos/SK_name.png",
+    symbol="/static/pics/logos/SK_logo.png",
     url="https://www.flysas.com/us-en/"
 )
 a34 = Airline(
@@ -314,8 +314,8 @@ a34 = Airline(
     iata_code="ZH",
     reward_program="Miles & More",
     alliance="Star Alliance",
-    logo="static/pics/logos/ZH_logo.png",
-    symbol="static/pics/logos/ZH_name.png",
+    logo="/static/pics/logos/ZH_name.png",
+    symbol="/static/pics/logos/ZH_logo.png",
     url="https://global.shenzhenair.com/zhair/ibe/common/flightSearch.do"
 )
 a35 = Airline(
@@ -323,8 +323,8 @@ a35 = Airline(
     iata_code="SQ",
     reward_program="KrisFlyer",
     alliance="Star Alliance",
-    logo="static/pics/logos/SQ_logo.png",
-    symbol="static/pics/logos/SQ_name.png",
+    logo="/static/pics/logos/SQ_name.png",
+    symbol="/static/pics/logos/SQ_logo.png",
     url="https://www.singaporeair.com/en_UK/us/home"
 )
 a36 = Airline(
@@ -332,8 +332,8 @@ a36 = Airline(
     iata_code="SA",
     reward_program="SAA Voyager",
     alliance="Star Alliance",
-    logo="static/pics/logos/SA_logo.png",
-    symbol="static/pics/logos/SA_name.png",
+    logo="/static/pics/logos/SA_name.png",
+    symbol="/static/pics/logos/SA_logo.png",
     url="https://www.flysaa.com/"
 )
 a37 = Airline(
@@ -341,8 +341,8 @@ a37 = Airline(
     iata_code="LX",
     reward_program="Miles & More",
     alliance="Star Alliance",
-    logo="static/pics/logos/LX_logo.png",
-    symbol="static/pics/logos/LX_name.png",
+    logo="/static/pics/logos/LX_name.png",
+    symbol="/static/pics/logos/LX_logo.png",
     url="https://www.swiss.com/ua/en/homepage"
 )
 a38 = Airline(
@@ -350,8 +350,8 @@ a38 = Airline(
     iata_code="TP",
     reward_program="Miles & Go",
     alliance="Star Alliance",
-    logo="static/pics/logos/TP_logo.png",
-    symbol="static/pics/logos/TP_name.png",
+    logo="/static/pics/logos/TP_name.png",
+    symbol="/static/pics/logos/TP_logo.png",
     url="https://www.flytap.com/en-us/"
 )
 a39 = Airline(
@@ -359,8 +359,8 @@ a39 = Airline(
     iata_code="TG",
     reward_program="Royal Orchid Plus",
     alliance="Star Alliance",
-    logo="static/pics/logos/TG_logo.png",
-    symbol="static/pics/logos/TG_name.png",
+    logo="/static/pics/logos/TG_name.png",
+    symbol="/static/pics/logos/TG_logo.png",
     url="https://www.thaiairways.com/en_TH/rop/index.page"
 )
 a40 = Airline(
@@ -368,8 +368,8 @@ a40 = Airline(
     iata_code="TK",
     reward_program="Miles & Smiles",
     alliance="Star Alliance",
-    logo="static/pics/logos/TK_logo.png",
-    symbol="static/pics/logos/TK_name.png",
+    logo="/static/pics/logos/TK_name.png",
+    symbol="/static/pics/logos/TK_logo.png",
     url="https://www.turkishairlines.com/en-tr/"
 )
 a41 = Airline(
@@ -377,8 +377,8 @@ a41 = Airline(
     iata_code="UA",
     reward_program="MileagePlus",
     alliance="Star Alliance",
-    logo="static/pics/logos/UA_logo.png",
-    symbol="static/pics/logos/UA_name.png",
+    logo="/static/pics/logos/UA_name.png",
+    symbol="/static/pics/logos/UA_logo.png",
     url="https://www.united.com/en/us/"
 )
 
@@ -388,8 +388,8 @@ a42 = Airline(
     iata_code="AR",
     reward_program="Aerolineas Plus",
     alliance="Sky Team",
-    logo="static/pics/logos/AR_logo.png",
-    symbol="static/pics/logos/AR_name.png",
+    logo="/static/pics/logos/AR_name.png",
+    symbol="/static/pics/logos/AR_logo.png",
     url="https://www.aerolineas.com.ar/en-eu"
 )
 a43 = Airline(
@@ -397,8 +397,8 @@ a43 = Airline(
     iata_code="AM",
     reward_program="Club Premier",
     alliance="Sky Team",
-    logo="static/pics/logos/AM_logo.png",
-    symbol="static/pics/logos/AM_name.png",
+    logo="/static/pics/logos/AM_name.png",
+    symbol="/static/pics/logos/AM_logo.png",
     url="https://aeromexico.com/en-us"
 )
 a44 = Airline(
@@ -406,8 +406,8 @@ a44 = Airline(
     iata_code="UX",
     reward_program="Air Europa SUMA",
     alliance="Sky Team",
-    logo="static/pics/logos/UX_logo.png",
-    symbol="static/pics/logos/UX_name.png",
+    logo="/static/pics/logos/UX_name.png",
+    symbol="/static/pics/logos/UX_logo.png",
     url="https://www.aireuropa.com/us/en/home"
 )
 a45 = Airline(
@@ -415,8 +415,8 @@ a45 = Airline(
     iata_code="AF",
     reward_program="Flying Blue",
     alliance="Sky Team",
-    logo="static/pics/logos/AF_logo.png",
-    symbol="static/pics/logos/AF_name.png",
+    logo="/static/pics/logos/AF_name.png",
+    symbol="/static/pics/logos/AF_logo.png",
     url="https://wwws.airfrance.fr/splash"
 )
 a46 = Airline(
@@ -424,8 +424,8 @@ a46 = Airline(
     iata_code="CI",
     reward_program="Dynasty Flyer",
     alliance="Sky Team",
-    logo="static/pics/logos/CI_logo.png",
-    symbol="static/pics/logos/CI_name.png",
+    logo="/static/pics/logos/CI_name.png",
+    symbol="/static/pics/logos/CI_logo.png",
     url="https://www.china-airlines.com/us/en"
 )
 a47 = Airline(
@@ -433,8 +433,8 @@ a47 = Airline(
     iata_code="OK",
     reward_program="OK Plus",
     alliance="Sky Team",
-    logo="static/pics/logos/OK_logo.png",
-    symbol="static/pics/logos/OK_name.png",
+    logo="/static/pics/logos/OK_name.png",
+    symbol="/static/pics/logos/OK_logo.png",
     url="https://www.csa.cz/cz-en/frequent-flyers/"
 )
 a48 = Airline(
@@ -442,8 +442,8 @@ a48 = Airline(
     iata_code="DL",
     reward_program="Skymiles",
     alliance="Sky Team",
-    logo="static/pics/logos/DL_logo.png",
-    symbol="static/pics/logos/DL_name.png",
+    logo="/static/pics/logos/DL_name.png",
+    symbol="/static/pics/logos/DL_logo.png",
     url="https://www.delta.com/"
 )
 a49 = Airline(
@@ -451,8 +451,8 @@ a49 = Airline(
     iata_code="GA",
     reward_program="GarudaMiles",
     alliance="Sky Team",
-    logo="static/pics/logos/GA_logo.png",
-    symbol="static/pics/logos/GA_name.png",
+    logo="/static/pics/logos/GA_name.png",
+    symbol="/static/pics/logos/GA_logo.png",
     url="https://www.garuda-indonesia.com/other-countries/en/index"
 )
 a50 = Airline(
@@ -460,8 +460,8 @@ a50 = Airline(
     iata_code="AZ",
     reward_program="MilleMiglia",
     alliance="Sky Team",
-    logo="static/pics/logos/AZ_logo.png",
-    symbol="static/pics/logos/AZ_name.png",
+    logo="/static/pics/logos/AZ_name.png",
+    symbol="/static/pics/logos/AZ_logo.png",
     url="https://www.ita-airways.com/en_us/homepage.html"
 )
 a51 = Airline(
@@ -469,8 +469,8 @@ a51 = Airline(
     iata_code="KQ",
     reward_program="Flying Blue",
     alliance="Sky Team",
-    logo="static/pics/logos/KQ_logo.png",
-    symbol="static/pics/logos/KQ_name.png",
+    logo="/static/pics/logos/KQ_name.png",
+    symbol="/static/pics/logos/KQ_logo.png",
     url="https://www.kenya-airways.com/us/en/"
 )
 a52 = Airline(
@@ -478,8 +478,8 @@ a52 = Airline(
     iata_code="KL",
     reward_program="Flying Blue",
     alliance="Sky Team",
-    logo="static/pics/logos/KL_logo.png",
-    symbol="static/pics/logos/KL_name.png",
+    logo="/static/pics/logos/KL_name.png",
+    symbol="/static/pics/logos/KL_logo.png",
     url="https://www.klm.com/"
 )
 a53 = Airline(
@@ -487,8 +487,8 @@ a53 = Airline(
     iata_code="KE",
     reward_program="SKYPASS",
     alliance="Sky Team",
-    logo="static/pics/logos/KE_logo.png",
-    symbol="static/pics/logos/KE_name.png",
+    logo="/static/pics/logos/KE_name.png",
+    symbol="/static/pics/logos/KE_logo.png",
     url="https://www.koreanair.com/us/en"
 )
 a54 = Airline(
@@ -496,8 +496,8 @@ a54 = Airline(
     iata_code="ME",
     reward_program="Cedar Miles",
     alliance="Sky Team",
-    logo="static/pics/logos/ME_logo.png",
-    symbol="static/pics/logos/ME_name.png",
+    logo="/static/pics/logos/ME_name.png",
+    symbol="/static/pics/logos/ME_logo.png",
     url="https://www.mea.com.lb/"
 )
 a55 = Airline(
@@ -505,8 +505,8 @@ a55 = Airline(
     iata_code="SV",
     reward_program="ALFURSAN",
     alliance="Sky Team",
-    logo="static/pics/logos/SV_logo.png",
-    symbol="static/pics/logos/SV_name.png",
+    logo="/static/pics/logos/SV_name.png",
+    symbol="/static/pics/logos/SV_logo.png",
     url="https://www.saudia.com/"
 )
 a56 = Airline(
@@ -514,8 +514,8 @@ a56 = Airline(
     iata_code="RO",
     reward_program="Flying Blue",
     alliance="Sky Team",
-    logo="static/pics/logos/RO_logo.png",
-    symbol="static/pics/logos/RO_name.png",
+    logo="/static/pics/logos/RO_name.png",
+    symbol="/static/pics/logos/RO_logo.png",
     url="https://www.tarom.ro/en/skyteam"
 )
 a57 = Airline(
@@ -523,8 +523,8 @@ a57 = Airline(
     iata_code="VN",
     reward_program="LotusMiles",
     alliance="Sky Team",
-    logo="static/pics/logos/VN_logo.png",
-    symbol="static/pics/logos/VN_name.png",
+    logo="/static/pics/logos/VN_name.png",
+    symbol="/static/pics/logos/VN_logo.png",
     url="https://www.vietnamairlines.com/us/en/home"
 )
 a58 = Airline(
@@ -532,8 +532,8 @@ a58 = Airline(
     iata_code="MF",
     reward_program="Egret Miles",
     alliance="Sky Team",
-    logo="static/pics/logos/MF_logo.png",
-    symbol="static/pics/logos/MF_name.png",
+    logo="/static/pics/logos/MF_name.png",
+    symbol="/static/pics/logos/MF_logo.png",
     url="https://www.xiamenair.cn/en-cn/"
 )
 
@@ -545,5 +545,5 @@ db.session.add_all([
     a41, a42, a43, a44, a45, a46, a47, a48, a49, a50, 
     a51, a52, a53, a54, a55, a56, a57, a58
     ])
-    
+
 db.session.commit()
