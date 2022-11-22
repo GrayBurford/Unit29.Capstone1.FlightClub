@@ -41,12 +41,12 @@ Flight Club was mainly created using Flask. The local PostgreSQL DB was seeded w
 Other technologies used:
 - SQL/PostgreSQL
 - SQLAlchemy
-- Python
+- Python/Flask
 - WTForms
 - bcrypt
 - jQuery
 - HTML Jinja Templating
-- Bootstrap/CSS
+- Bootstrap5/CSS
 
 ---
 ### **Database Schema:**
