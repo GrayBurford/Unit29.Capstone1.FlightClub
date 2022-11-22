@@ -22,8 +22,11 @@
         {% endfor %}
 
         <div class="alert alert-warning" role="alert">
-            Don't forget to enter your password to confirm any changes
+            <strong>NOTE:</strong> Don't forget to enter your password to confirm any changes
         </div>
+
+        <hr>
+        
         {% for field in form if field.widget.input_type != 'hidden'%}
         <div class="form-group row">
             <strong>{{ field.label(class_="col-sm-2 col-form-label")}}</strong>

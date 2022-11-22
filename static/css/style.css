@@ -38,7 +38,12 @@
     /* background: rgba(255, 255, 255); */
 }
 
-img {
+/* img {
     height : 40px;
     width : 150px;
+} */
+
+.program-img {
+    height : 400px;
+    width : 6000px;
 }

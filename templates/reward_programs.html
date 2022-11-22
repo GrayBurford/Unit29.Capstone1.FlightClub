@@ -47,6 +47,33 @@
     <hr>
 
     {% if user.user_airlines %}
+
+        <h1 class="display-6">{{ user.username }}'s saved airline frequent flyer programs:</h1>
+
+        {% for program in user.user_airlines %}
+            <div class="card bg-dark text-dark">
+                <img src="{{program.airlines.symbol}}" class="card-img program-img" alt="card-img-overlay">
+                <div class="card-img-overlay">
+                    <h5 class="card-title">{{program.airlines.name}} ({{program.airlines.reward_program}})</h5>
+                    <p class="card-text">Your {{program.airlines.reward_program}} account # is: <strong>{{program.acct_number}}</strong></p>
+                    <p class="card-text"><strong>Notes:</strong> {{program.notes}}</p>
+                    <a href="/users/{{user.username}}" class="btn btn-primary">Go back to Account</a>
+                    <a href="/rewards/{{user.id}}/{{program.airline_id}}/delete" class="btn btn-danger">Delete Program</a>
+                </div>
+                <div class="card-footer text-muted">
+                    This airline is a member of: {{program.airlines.alliance}}
+                </div>
+            </div>
+        {% endfor %}
+
+    {% else %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>{{ user.username }}!</strong> You have not added any Airline's Frequent Flyer Programs to your account yet!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+
+    <!-- {% if user.user_airlines %}
         <h1 class="display-6">{{ user.username }}'s saved airline frequent flyer programs:</h1>
         <hr>
         <ul class="list-group list-group-numbered mb-5">
@@ -55,7 +82,6 @@
                 User ID: {{ program.user_id }}
                 Airline ID: {{ program.airline_id }}
                 Account #: {{ program.acct_number }}
-                <!-- Is user_airlines a list []? for loop? -->
                 Name & Program: {{ program.airlines.name }} -- {{ program.airlines.reward_program }}
                 <span class="badge bg-danger">
                     <a href="/rewards/{{user.id}}/{{program.airline_id}}/delete" class="text-decoration-none text-white">Delete</a>
@@ -63,7 +89,7 @@
             </li>
             {% endfor %}
         </ul>
-    {% endif %}
+    {% endif %} -->
 
 </div>
 

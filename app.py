@@ -278,9 +278,6 @@ def airline_programs(username):
     if form.validate_on_submit():
         try:
             NOT_ZERO_ID = int(form.oneworld.data) or int(form.skyteam.data) or int(form.staralliance.data)
-            print(form.oneworld.data)
-            print(form.skyteam.data)
-            print(form.staralliance.data)
 
             new_program = UserAirline(
                 user_id=user.id, 
@@ -401,7 +398,7 @@ def delete_program(user_id, airline_id):
         return redirect(url_for('home_page'))
 
     user = g.user
-    
+
     try:
         program = UserAirline.query.filter_by(user_id=1, airline_id=4).one()
         print(program)
