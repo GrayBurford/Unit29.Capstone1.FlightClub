@@ -5,12 +5,13 @@
 {% block content %}
 
 <h1 class="display-4 text-primary text-center mt-5">*** Register Your Account ***</h1>
-<hr>
+<hr class="bg-white">
 <div class="container mt-5">
     <form action="/register" method="POST">
 
         {{ form.hidden_tag() }}
 
+        <!-- Render any form errors first -->
         {% for field in form.errors %}
         <div class="alert alert-danger">{{field}}:
             <ul>
@@ -21,15 +22,15 @@
         </div>
         {% endfor %}
 
+        <!-- Loop over all fields to display label and field -->
         {% for field in form if field.widget.input_type != 'hidden'%}
-        <div class="form-group row">
-        <strong>{{ field.label(class_="col-sm-2 col-form-label")}}</strong>
-            <div class="col-sm-10">
-                {{ field(class_="form-control") }}
-            </div>
+        <span class="row"><strong>{{ field.label(class_="form-label")}}</strong></span>
+        <div class="form-group row col-12">
+            {{ field(class_="form-control form-control-lg") }}
         </div>
         {% endfor %}
 
+        <!-- Register button -->
         <div class="col-12 mt-5">
             <button class="btn btn-primary" type="submit">Register Account</button>
         </div>

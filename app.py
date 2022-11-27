@@ -122,7 +122,7 @@ def register_user():
         # before_request queryies User to save g.user as that user's instance
         do_login(new_user)
 
-        flash(f"Welcome to FlightClub, {new_user.username}! Your account was created successfully!", "success")
+        flash(f"Welcome to FlightClub, {new_user.username}! Your account was created successfully!", "primary")
 
         return redirect(url_for('display_user_profile', username=new_user.username))
     
@@ -147,7 +147,7 @@ def login():
 
             if user:
                 do_login(user)
-                flash(f"Welcome back to FlightClub, {user.username}!", "success")
+                flash(f"Welcome back to FlightClub, {user.username}!", "primary")
                 return redirect(url_for('display_user_profile', username=user.username))
         except IntegrityError as err:
             print(err)
@@ -168,7 +168,7 @@ def logout():
 
     if CURR_USER_ID in session:
         user = User.query.get_or_404(session[CURR_USER_ID])
-        flash(f"Good-bye {user.username}, you logged out successfully.", "success")
+        flash(f"Good-bye {user.username}, you logged out successfully.", "primary")
         do_logout()
         return redirect(url_for('home_page'))
     else:
@@ -199,7 +199,11 @@ def display_user_profile(username):
 
     user = User.query.filter_by(username=username).first()
 
-    return render_template('user_profile.html', user=user)
+    num_flights = Flight.query.filter_by(user_username=user.username).count()
+
+    num_programs = UserAirline.query.filter_by(user_id=user.id).count()
+
+    return render_template('user_profile.html', user=user, num_flights=num_flights, num_programs=num_programs)
 
 
 @app.route('/users/editprofile', methods=["GET", "POST"])
@@ -296,6 +300,23 @@ def airline_programs(username):
 
     return render_template('reward_programs.html', form=form, user=user, username=username)
 
+##############################################################################
+# FLIGHT ROUTES
+
+@app.route('/flight/<int:flight_id>', methods=["GET"])
+def view_flight(flight_id):
+    """View info about a specific user's saved flight."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect(url_for('home_page'))
+
+    user = g.user
+
+    flight = Flight.query.get_or_404(flight_id)
+
+    return render_template('view_flight.html', user=user, flight=flight)
+
 
 @app.route('/flight/<int:flight_id>/delete', methods=["GET"])
 def delete_flight(flight_id):
@@ -309,12 +330,9 @@ def delete_flight(flight_id):
     db.session.delete(flight)
     db.session.commit()
 
-    flash("You successfully deleted that saved flight", "success")    
+    flash("You successfully deleted that saved flight", "primary")    
     return redirect(f'/users/{g.user.username}')
 
-
-##############################################################################
-# FLIGHT ROUTES
 
 @app.route('/search', methods=['GET', 'POST'])
 def flight_search():
@@ -343,6 +361,7 @@ def flight_search():
             flash('Please fill in the required fields: Origin, Destination, and Date', 'danger')
 
     return render_template('search.html', form=form)
+
 
 @app.route('/saveflight', methods=['POST'])
 def save_flight():
@@ -400,16 +419,17 @@ def delete_program(user_id, airline_id):
     user = g.user
 
     try:
-        program = UserAirline.query.filter_by(user_id=1, airline_id=4).one()
+        program = UserAirline.query.filter_by(user_id=user_id, airline_id=airline_id).one()
         print(program)
 
         db.session.delete(program)
         db.session.commit()
+
     except IntegrityError as err:
         print(err)
         flash('Cannot delete this program.', 'danger')
 
-    flash("You successfully deleted that saved airline program", "success")    
+    flash("You successfully deleted that saved airline program", "primary")    
     return redirect(f'/users/{user.username}/rewards')
     
 

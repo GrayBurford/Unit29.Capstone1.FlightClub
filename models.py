@@ -11,7 +11,7 @@ def connect_db(app):
     db.app = app
     db.init_app(app)
 
-default_user_pic = '../static/default_user_icon.jpg'
+default_user_pic = '/static/pics/default_user_icon.jpg'
 default_user_url = 'https://w0.peakpx.com/wallpaper/982/773/HD-wallpaper-anonymous-fawkes-hack-mask.jpg'
 
 
@@ -27,7 +27,7 @@ class User(db.Model):
     last_name = db.Column(db.String(50), nullable=False)
     age = db.Column(db.Integer, nullable=True)
     email = db.Column(db.String(80), unique=True, nullable=False)
-    profile_pic = db.Column(db.String(1000), nullable=True, default='../static/default_user_icon.jpg')
+    profile_pic = db.Column(db.String(1000), nullable=True, default='/static/pics/default_user_icon.jpg')
     notes = db.Column(db.String(1000), nullable=True)
 
     flights = db.relationship('Flight', cascade="all, delete")

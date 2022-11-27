@@ -4,45 +4,56 @@
 
 {% block content %}
 
-<h1 class="display-6">Hi, {{ user.username }}! </h1>
+<h1 class="display-6">Hi, {{ user.username }}! Welcome to your personal profile!</h1>
 
-<ul class="list-group">
-    <li class="list-group-item">{{ user.username }}</li>
-    <li class="list-group-item">{{ user.password }}</li>
-    <li class="list-group-item">{{ user.first_name }}</li>
-    <li class="list-group-item">{{ user.last_name }}</li>
-    <li class="list-group-item">{{ user.age }}</li>
-    <li class="list-group-item">{{ user.email }}</li>
-    <li class="list-group-item">{{ user.profile_pic }}</li>
-    <li class="list-group-item">{{ user.notes }}</li>
-    <li class="list-group-item">{{ user.flights }}</li>
-</ul>
-
-<div class="container mt-5">
-    <img src='{{ user.profile_pic }}' width="150" height="150" alt="Image for {{ user.username }}">
+<div class="card border-dark">
+    <div class="row g-0">
+        <div class="col-5 col-sm-4">
+            <img src="{{ user.profile_pic }}" class="img-fluid w-150" alt="Profile pic for {{ user.username }}">
+        </div>
+        <div class="col-7 col-sm-8">
+            <div class="card-body">
+            <h5 class="card-title">Full name: {{ user.first_name }} {{ user.last_name }}</h5>
+            <p class="card-text">Age: {{ user.age }}</p>
+            <p class="card-text">E-mail: {{ user.email }}</p>
+            <p class="card-text">You have <strong><u>{{ num_flights }}</u></strong> saved flights</p>
+            <p class="card-text">You have <strong><u>{{ num_programs }}</u></strong> saved airline programs</p>
+            <p class="card-text">Notes:<small class="text-muted"> {{ user.notes }} </small></p>
+            </div>
+        </div>
+    </div>
 </div>
-<hr>
+
+<hr class="bg-white">
 
 <form method="POST" action="/users/delete" class="form-inline">
-    <a class="btn btn-secondary" href="/users/editprofile">Edit your profile info here</a>
-    <a class="btn btn-info" href="/users/{{ user.username }}/rewards">Airline Reward Programs</a>
-    <button class="btn btn-danger">Delete Profile</button>
+    <a class="btn btn-secondary mx-2" href="/users/editprofile">Edit your profile info here</a>
+    <a class="btn btn-primary mx-2" href="/users/{{ user.username }}/rewards">Airline Reward Programs</a>
+    <button class="btn btn-danger mx-2">Delete Profile</button>
 </form>
 
-<hr>
+<hr class="bg-white">
 
 {% if user.flights %}
     <h1 class="display-6">{{ user.username }}'s saved flights:</h1>
     <ul class="list-group list-group-numbered mb-5">
         {% for flight in user.flights %}
         <li class="list-group-item">
-            ID: {{ flight.id }} -- {{ flight.airline_name }} -- {{ flight.airline_iata_code }} {{ flight.flight_number }}
-            <span class="badge bg-danger">
+            <span><img src="/static/pics/logos/{{ flight.airline_iata_code }}_logo.png" class="img-fluid img-thumbnail border-5 border border-primary" width="40" height="40" alt="X"></span>
+            <span>{{flight.departure_airport_code}} to {{flight.arrival_airport_code}} on {{flight.departure_date}} at {{flight.departure_time}} on {{flight.airline_name}}'s flight # {{ flight.airline_iata_code }} {{ flight.flight_number }}</span> 
+            <span class="badge bg-primary mx-1">
+                <a href="/flight/{{flight.id}}" class="text-decoration-none text-white">View Flight!</a>
+            </span>
+            <span class="badge bg-danger mx-1">
                 <a href="/flight/{{flight.id}}/delete" class="text-decoration-none text-white">Delete</a>
             </span>
         </li>
         {% endfor %}
     </ul>
+{% else %}
+<div class="alert alert-primary" role="alert">
+    {{ user.username }} hasn't saved any flights yet! Visit <a href="/search" class="alert-link">Search Flights</a> to find flights of interest.
+</div>
 {% endif %}
   
 {% endblock %}

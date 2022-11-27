@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Flight Info{% endblock %}
+
+{% block content %}
+
+<h1 class="display-1">Testing flight info</h1>
+
+<ul>
+    <li>{{flight.id}}</li>
+    <li>{{flight.airline_name}}</li>
+    <li>{{flight.airline_iata_code}}</li>
+    <li>{{flight.flight_number}}</li>
+    <li>{{flight.departure_date}}</li>
+    <li>{{flight.departure_time}}</li>
+    <li>{{flight.departure_airport_code}}</li>
+    <li>{{flight.arrival_date}}</li>
+    <li>{{flight.arrival_time}}</li>
+    <li>{{flight.arrival_airport_code}}</li>
+    <li>{{flight.nonstop}}</li>
+    <li>{{flight.price}}</li>
+    <li>{{flight.user_username}}</li>
+</ul>
+
+<div class="col-12 mt-5">
+    <a class="btn btn-secondary" href="/users/{{user.username}}">Back to My Profile</a>
+    <a class="btn btn-danger" href="/">Delete this flight</a>
+</div>
+
+<h1 class="display-6">This flight can be bought from the following alliance airline programs that you already have membership with!</h1>
+
+<ul>
+    <li>Airline1</li>
+    <li>Airline2</li>
+    <li>Airline3</li>
+</ul>
+
+<h1 class="display-6">This flight is also in an alliance codeshare agreement with the following airlines that you do not have membership with. Please consider visiting these airline's websites and signing up!</h1>
+
+<ul>
+    <li>Airline1</li>
+    <li>Airline2</li>
+    <li>Airline3</li>
+    <li>Airline4</li>
+    <li>Airline5</li>
+</ul>
+
+<h1 class="display-6">You have the following credit cards that can transfer their unique points to this airline's frequent flyer account</h1>
+
+<ul>
+    <li>Credit Card 1</li>
+    <li>Credit Card 2</li>
+    <li>Credit Card 3</li>
+</ul>
+  
+{% endblock %}
