@@ -60,11 +60,14 @@
                     </div>
                     <div class="col-7 col-sm-8">
                         <div class="card-body">
-                            <h5 class="card-title">{{program.airlines.name}} ({{program.airlines.reward_program}})</h5>
+                            <h5 class="card-title">{{program.airlines.name}}  ({{program.airlines.reward_program}})</h5>
                             <p class="card-text">Your {{program.airlines.reward_program}} account # is: <strong>{{program.acct_number}}</strong></p>
                             <p class="card-text"><strong>Notes:</strong>{{program.notes}}</p>
                             <a href="/users/{{user.username}}" class="btn btn-primary">Go back to Account</a>
                             <a href="/rewards/{{user.id}}/{{program.airline_id}}/delete" class="btn btn-danger">Delete Program</a>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <img src="{{ program.airlines.logo }}" class="img-fluid border-5 border rounded border-secondary" width="150" height="40" alt="X"> ... a member of {{ program.airlines.alliance }}
                         </div>
                     </div>
                 </div>
