@@ -4,8 +4,9 @@
 
 {% block content %}
 
-<h1 class="display-6">Hi, {{ user.username }}! Welcome to your personal profile!</h1>
+<h1 class="display-6 text-center">Hi, {{ user.username }}! Welcome to your personal profile!</h1>
 
+<!-- User bio div -->
 <div class="card border-dark">
     <div class="row g-0">
         <div class="col-5 col-sm-4">
@@ -16,8 +17,8 @@
             <h5 class="card-title">Full name: {{ user.first_name }} {{ user.last_name }}</h5>
             <p class="card-text">Age: {{ user.age }}</p>
             <p class="card-text">E-mail: {{ user.email }}</p>
-            <p class="card-text">You have <strong><u>{{ num_flights }}</u></strong> saved flights</p>
-            <p class="card-text">You have <strong><u>{{ num_programs }}</u></strong> saved airline programs</p>
+            <p class="card-text">You have <span class="badge bg-info">{{ num_flights }}</span> saved flights!</p>
+            <p class="card-text">You have <span class="badge bg-info">{{num_programs}}</span> saved airline programs!</p>
             <p class="card-text">Notes:<small class="text-muted"> {{ user.notes }} </small></p>
             </div>
         </div>
@@ -26,16 +27,25 @@
 
 <hr class="bg-white">
 
+<!-- Buttons -->
 <form method="POST" action="/users/delete" class="form-inline">
-    <a class="btn btn-secondary mx-2" href="/users/editprofile">Edit your profile info here</a>
+    <a class="btn btn-secondary mx-2" href="/users/editprofile">Edit Profile</a>
     <a class="btn btn-primary mx-2" href="/users/{{ user.username }}/rewards">Airline Reward Programs</a>
     <button class="btn btn-danger mx-2">Delete Profile</button>
 </form>
 
 <hr class="bg-white">
 
+
+<!-- Render list of user's saved flights -->
 {% if user.flights %}
     <h1 class="display-6">{{ user.username }}'s saved flights:</h1>
+
+    <div class="alert alert-info" role="alert">
+        <strong>Note:</strong> View a flight to see all your other methods of purchasing this option with other airline's reward points!
+    </div>
+
+
     <ul class="list-group list-group-numbered mb-5">
         {% for flight in user.flights %}
         <li class="list-group-item">
@@ -50,10 +60,14 @@
         </li>
         {% endfor %}
     </ul>
+
 {% else %}
+
 <div class="alert alert-primary" role="alert">
     {{ user.username }} hasn't saved any flights yet! Visit <a href="/search" class="alert-link">Search Flights</a> to find flights of interest.
 </div>
+
 {% endif %}
+
   
 {% endblock %}

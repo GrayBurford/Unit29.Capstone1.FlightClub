@@ -82,7 +82,7 @@ class AddRewardProgramForm(FlaskForm):
 
     acct_number = StringField("Account Number", validators=[InputRequired(message='Please enter the program\'s account number')])
     
-    notes = StringField("Additional Notes")
+    notes = StringField("Additional Notes (Optional)")
 
 
 ###########################################################################

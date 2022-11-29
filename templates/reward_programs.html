@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<h1 class="display-6 text-primary text-center mt-5">*** Add a new Frequent Flyer program to your account, <strong>{{ user.username }}</strong>! ***</h1>
+<h1 class="display-6 text-primary text-center mt-5">*** <strong>{{ user.username }}</strong>! Add a new Frequent Flyer program to your account below! ***</h1>
 
 <hr class="bg-white">
 
@@ -49,7 +49,7 @@
 
     {% if user.user_airlines %}
 
-        <h1 class="display-6">{{ user.username }}'s saved airline frequent flyer programs:</h1>
+        <h1 class="display-6 text-center">{{ user.username }}'s saved airline frequent flyer programs:</h1>
         <hr class="bg-white">
         {% for program in user.user_airlines %}
 
@@ -62,12 +62,12 @@
                         <div class="card-body">
                             <h5 class="card-title">{{program.airlines.name}}  ({{program.airlines.reward_program}})</h5>
                             <p class="card-text">Your {{program.airlines.reward_program}} account # is: <strong>{{program.acct_number}}</strong></p>
-                            <p class="card-text"><strong>Notes:</strong>{{program.notes}}</p>
+                            <p class="card-text"><strong>Notes:</strong>  {{program.notes}}</p>
                             <a href="/users/{{user.username}}" class="btn btn-primary">Go back to Account</a>
                             <a href="/rewards/{{user.id}}/{{program.airline_id}}/delete" class="btn btn-danger">Delete Program</a>
                         </div>
                         <div class="card-footer text-muted">
-                            <img src="{{ program.airlines.logo }}" class="img-fluid border-5 border rounded border-secondary" width="150" height="40" alt="X"> ... a member of {{ program.airlines.alliance }}
+                            <img src="{{ program.airlines.logo }}" class="img-fluid border-5 border rounded border-primary" width="150" height="40" alt="X"> *Member of <u>{{ program.airlines.alliance }}</u>
                         </div>
                     </div>
                 </div>

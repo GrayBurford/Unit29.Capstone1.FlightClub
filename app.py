@@ -87,7 +87,9 @@ def do_logout():
 def home_page():
     """Display anon landing page."""
 
-    return render_template('anon_home.html')
+    airlines = Airline.query.all()
+
+    return render_template('anon_home.html', airlines=airlines)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -134,8 +136,6 @@ def register_user():
 def login():
     """Render login form, or log a user in."""
 
-    airlines = Airline.query.all()
-
     if g.user:
         flash(f'You are already logged in as {g.user.username}! Logout first if you want to log in as a different user.', "danger")
 
@@ -155,7 +155,7 @@ def login():
             return redirect(url_for('login'))
 
     else:
-        return render_template('login.html', form=form, airlines=airlines)
+        return render_template('login.html', form=form)
 
 
 @app.route('/logout', methods=['GET'])
@@ -289,9 +289,12 @@ def airline_programs(username):
                 acct_number=form.acct_number.data
             )
 
+            airline = Airline.query.get_or_404(NOT_ZERO_ID)
+
             db.session.add(new_program)
             db.session.commit()
 
+            flash(f"You successfully added {airline.name}'s Frequent Flyer Program ({airline.reward_program}) to your account!", "success")
             return redirect(url_for('airline_programs', user=user, username=username, form=form))
 
         except IntegrityError as err:
@@ -315,7 +318,25 @@ def view_flight(flight_id):
 
     flight = Flight.query.get_or_404(flight_id)
 
-    return render_template('view_flight.html', user=user, flight=flight)
+    airline = Airline.query.filter_by(iata_code=flight.airline_iata_code).one()
+
+    program = UserAirline.query.filter_by(user_id=user.id, airline_id=airline.id).first()
+
+    all_allies = Airline.query.filter_by(alliance=airline.alliance).all()
+    print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+    print(all_allies)
+
+    all_user_programs_airline_ids = [each.airline_id for each in UserAirline.query.filter_by(user_id=user.id).all()]
+
+    print("************************")
+    print(all_user_programs_airline_ids)
+
+
+    # have_acct_allies = [a for a in Airline.query.filter_by(alliance=airline.alliance).all() if a.name is not airline.name]
+
+    # no_acct_allies = [a for a in Airline.query.filter_by(alliance=airline.alliance).all() if a.name is not airline.name]
+
+    return render_template('view_flight.html', user=user, flight=flight, airline=airline, program=program, all_allies=all_allies, all_user_programs_airline_ids=all_user_programs_airline_ids)
 
 
 @app.route('/flight/<int:flight_id>/delete', methods=["GET"])
@@ -429,7 +450,7 @@ def delete_program(user_id, airline_id):
         print(err)
         flash('Cannot delete this program.', 'danger')
 
-    flash("You successfully deleted that saved airline program", "primary")    
+    flash("You successfully deleted that saved airline program", "danger")    
     return redirect(f'/users/{user.username}/rewards')
     
 

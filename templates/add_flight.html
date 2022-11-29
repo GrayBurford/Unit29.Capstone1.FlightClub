@@ -1,30 +1,35 @@
 {% extends 'base.html' %}
 
-{% block title %}Save Flight{% endblock %}
+{% block title %}Saved Flight{% endblock %}
 
 {% block content %}
 
-<h1 class="display-6 text-primary text-center mt-5">{{ user.username }}, you just saved the following flight to your personal profile.</h1>
+<h1 class="display-6 text-primary text-center mt-5">{{ user.username }}, you saved this flight to your profile!</h1>
 
-<ul class="list-group">
-    <li class="list-group-item">{{ flight.airline_name }}</li>
-    <li class="list-group-item">{{ flight.airline_iata_code }}</li>
-    <li class="list-group-item">{{ flight.flight_number }}</li>
-    <li class="list-group-item">{{ flight.departure_date }}</li>
-    <li class="list-group-item">{{ flight.departure_time }}</li>
-    <li class="list-group-item">{{ flight.departure_airport_code }}</li>
-    <li class="list-group-item">{{ flight.arrival_date }}</li>
-    <li class="list-group-item">{{ flight.arrival_time }}</li>
-    <li class="list-group-item">{{ flight.arrival_airport_code }}</li>
-    <li class="list-group-item">{{ flight.nonstop }}</li>
-    <li class="list-group-item">{{ flight.price }}</li>
-    <li class="list-group-item">{{ flight.user_username }}</li>
-</ul>
 <hr class="bg-white">
-<a href="/search" class="btn btn-secondary">Search for another flight!</a>
-<a href="/users/{{user.username}}" class="btn btn-info">My Profile</a>
 
-<!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
-<!-- <script src="../static/js/script.js"></script> -->
+<div class="card">
+    <div class="row g-0">
+        <div class="col-5 col-sm-4">
+            <img src="/static/pics/logos/{{flight.airline_iata_code}}_logo.png" class="img-fluid w-100" alt="IMG NOT AVAILABLE">
+        </div>
+        <div class="col-7 col-sm-8">
+            <div class="card-body">
+                <h5 class="card-title">{{flight.airline_name}} flight # {{ flight.airline_iata_code }} {{ flight.flight_number }}</h5>
+                <p class="card-text">Depart {{ flight.departure_date }} at {{ flight.departure_time }} from {{ flight.departure_airport_code }}</p>
+                <p class="card-text">Arrive {{ flight.arrival_date }} at {{ flight.arrival_time }} at {{ flight.arrival_airport_code }}</p>
+                <a href="/search" class="btn btn-secondary">Search for another flight!</a>
+                <a href="/users/{{user.username}}" class="btn btn-info">My Profile</a>
+            </div>
+            <div class="card-footer text-muted">
+                <img src="/static/pics/logos/{{flight.airline_iata_code}}_name.png" class="img-fluid border-5 border rounded border-primary" width="150" height="40" alt="X"> Total price: ${{ flight.price }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="bg-white">
+
+
 {% endblock %}
 

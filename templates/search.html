@@ -11,6 +11,9 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.cs
 {% endblock %}
 
 {% block content %}
+
+<!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
+<!-- ***Flight Search Form -->
 <div class="container-sm">
 
 	<div class="alert alert-warning" role="alert">
@@ -162,30 +165,34 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.cs
 		</div>
 		<button id="search-button" class="w-100 btn btn-primary">Search Flights!</button>
 	</form>
-
 	
 </div>
 
+
+
+<!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
 <!-- Grid to append flight search results -->
 <div class="container-sm mt-5 mb-5">
 	<div class="row row-cols-1 row-cols-sm-2 g-3">
+
 		{% for itin in itins %}
 		<div class="col">
 			<div class="card">
 				<img src="/static/pics/logos/{{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['marketing_airline_code'] }}_name.png" class="card-img" alt="{{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['marketing_airline'] }}'s airline logo not available.">
 				<!-- <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2iffEs8PdHsC2Qc2l6StuCwyF8MI0uI2D5w&usqp=CAU" class="card-img-top img-thumbnail" alt="card-grid-image"> -->
 				<div class="card-body">
-					<h5 class="card-title">{{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['marketing_airline'] }}: Flight #{{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['marketing_airline_code'] }} {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['flight_number'] }}</h5>
+					<h5 class="card-title">
+						<img src="/static/pics/logos/{{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['marketing_airline_code'] }}_logo.png" class="img-fluid img-thumbnail border-5 border border-primary" width="40" height="40" alt="X">
+						{{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['marketing_airline'] }} flight #{{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['marketing_airline_code'] }} {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['flight_number'] }}</h5>
+
 					<ul class="list-group list-group-flush">
-						<li class="list-group-item">Cabin Class: {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['cabin_name'] }}</li>
-						<li class="list-group-item">Airline: {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['marketing_airline'] }}</li>
-						<li class="list-group-item">Airline Code: {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['marketing_airline_code'] }}</li>
-						<li class="list-group-item">Flight Number: {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['flight_number'] }}</li>
-						<li class="list-group-item">Flight duration: {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['duration'] }}</li>
 						<li class="list-group-item">Departs {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['departure']['airport']['name'] }} ({{ itin['slice_data']['slice_0']['flight_data']['flight_0']['departure']['airport']['code'] }}) at: {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['departure']['datetime']['time_12h'] }} on {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['departure']['datetime']['date_display'] }}</li>
 						<li class="list-group-item">Arrives {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['arrival']['airport']['name'] }} ({{ itin['slice_data']['slice_0']['flight_data']['flight_0']['arrival']['airport']['code'] }}) at: {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['arrival']['datetime']['time_12h'] }} on {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['arrival']['datetime']['date_display'] }}</li>
+						<li class="list-group-item">Flight duration: {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['duration'] }} (nonstop)</li>
+						<li class="list-group-item">Cabin Class: {{ itin['slice_data']['slice_0']['flight_data']['flight_0']['info']['cabin_name'] }}</li>
 						<li class="list-group-item">Total price: ${{ itin['price_details']['display_total_fare_per_ticket'] }}</li>
 					</ul>
+
 				</div>
 
 				<!-- Button that submits hidden form inputs back to Flask to populate SESSION -->
@@ -216,9 +223,13 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.cs
 						<button class="btn btn-success" type="submit">Choose this flight!</button>
 					</form>
 				</div>
+
+
 			</div>
+			<hr class="bg-white">
 		</div>
 		{% endfor %}
+
 	</div>
 </div>
 

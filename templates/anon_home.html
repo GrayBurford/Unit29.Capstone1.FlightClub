@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="home-background fw-bold">
-    <h1 class="display-6 fw-bold">What is Flight Club and how can it help you?</h1>
+    <h1 class="display-6 fw-bold text-center">What is Flight Club and how can it help you?</h1>
 
     <p>Do you: 1) have a credit card that earns points, 2) fly often, and 3) want to learn about a little known secret to exponentially increase your flight options when browsing your next trip? Then please read on!</p>
     
@@ -22,6 +22,14 @@
 
 </div>
 
+<ul class="list-group list-group-numbered">
+    {% for airline in airlines %}
+    <li class="list-group-item">{{ airline.name }} ({{ airline.iata_code }})'s reward program is: {{ airline.reward_program }} and is part of the {{ airline.alliance }} Alliance. You can sign up for their frequent flyer program at: {{ airline.url }}
+    <img src="{{airline.symbol}}" alt="{{airline.name}}'s symbol" height="100">
+    <img src="{{airline.logo}}" alt="{{airline.name}}'s logo" width="400">
+    </li>
+    {% endfor %}
+</ul>
 
   
 {% endblock %}
