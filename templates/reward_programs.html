@@ -9,7 +9,7 @@
 <hr class="bg-white">
 
 <div class="alert alert-warning" role="alert">
-    <strong>NOTE:</strong> Please select only <u>one</u> Airline Program below, and enter your account # with that airline to continue.
+    <strong>NOTE: &nbsp;</strong> Please select only <u>one</u> Airline Program below, and enter your account # with that airline to continue.
 </div>
 
 <div class="container mt-5">
@@ -61,13 +61,13 @@
                     <div class="col-7 col-sm-8">
                         <div class="card-body">
                             <h5 class="card-title">{{program.airlines.name}}  ({{program.airlines.reward_program}})</h5>
-                            <p class="card-text">Your {{program.airlines.reward_program}} account # is: <strong>{{program.acct_number}}</strong></p>
-                            <p class="card-text"><strong>Notes:</strong>  {{program.notes}}</p>
+                            <p class="card-text">Your {{program.airlines.reward_program}} account # is: <strong class="lead"> &nbsp; &nbsp; <u>{{program.acct_number}}</u></strong></p>
+                            <p class="card-text"><strong>Notes: &nbsp;</strong>  {{program.notes}}</p>
                             <a href="/users/{{user.username}}" class="btn btn-primary">Go back to Account</a>
                             <a href="/rewards/{{user.id}}/{{program.airline_id}}/delete" class="btn btn-danger">Delete Program</a>
                         </div>
                         <div class="card-footer text-muted">
-                            <img src="{{ program.airlines.logo }}" class="img-fluid border-5 border rounded border-primary" width="150" height="40" alt="X"> *Member of <u>{{ program.airlines.alliance }}</u>
+                            <img src="{{ program.airlines.logo }}" class="img-fluid border-5 border rounded border-primary" width="150" height="40" alt="X"> &nbsp; Member of <u>{{ program.airlines.alliance }}</u>
                         </div>
                     </div>
                 </div>

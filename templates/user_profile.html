@@ -14,12 +14,12 @@
         </div>
         <div class="col-7 col-sm-8">
             <div class="card-body">
-            <h5 class="card-title">Full name: {{ user.first_name }} {{ user.last_name }}</h5>
-            <p class="card-text">Age: {{ user.age }}</p>
-            <p class="card-text">E-mail: {{ user.email }}</p>
+            <h5 class="card-title">Full name: &nbsp; {{ user.first_name }} {{ user.last_name }}</h5>
+            <p class="card-text">Age: &nbsp; {{ user.age }}</p>
+            <p class="card-text">E-mail: &nbsp; {{ user.email }}</p>
             <p class="card-text">You have <span class="badge bg-info">{{ num_flights }}</span> saved flights!</p>
             <p class="card-text">You have <span class="badge bg-info">{{num_programs}}</span> saved airline programs!</p>
-            <p class="card-text">Notes:<small class="text-muted"> {{ user.notes }} </small></p>
+            <p class="card-text">Notes: &nbsp; <small class="text-muted"> {{ user.notes }} </small></p>
             </div>
         </div>
     </div>
@@ -41,15 +41,16 @@
 {% if user.flights %}
     <h1 class="display-6">{{ user.username }}'s saved flights:</h1>
 
-    <div class="alert alert-info" role="alert">
-        <strong>Note:</strong> View a flight to see all your other methods of purchasing this option with other airline's reward points!
+    <div class="alert alert-warning fade show" role="alert">
+        <span class="lead"><strong>NOTE:</strong> &nbsp; View a flight below to browse all methods for purchasing with airline alliance member's reward programs!</span>
     </div>
 
 
     <ul class="list-group list-group-numbered mb-5">
         {% for flight in user.flights %}
         <li class="list-group-item">
-            <span><img src="/static/pics/logos/{{ flight.airline_iata_code }}_logo.png" class="img-fluid img-thumbnail border-5 border border-primary" width="40" height="40" alt="X"></span>
+            <img src="/static/pics/logos/{{ flight.airline_iata_code }}_logo.png" class="img-fluid img-thumbnail border-5 border border-primary" width="40" height="40" alt="X">
+            &nbsp;
             <span>{{flight.departure_airport_code}} to {{flight.arrival_airport_code}} on {{flight.departure_date}} at {{flight.departure_time}} on {{flight.airline_name}}'s flight # {{ flight.airline_iata_code }} {{ flight.flight_number }}</span> 
             <span class="badge bg-primary mx-1">
                 <a href="/flight/{{flight.id}}" class="text-decoration-none text-white">View Flight!</a>

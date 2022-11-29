@@ -22,14 +22,6 @@
 
 </div>
 
-<ul class="list-group list-group-numbered">
-    {% for airline in airlines %}
-    <li class="list-group-item">{{ airline.name }} ({{ airline.iata_code }})'s reward program is: {{ airline.reward_program }} and is part of the {{ airline.alliance }} Alliance. You can sign up for their frequent flyer program at: {{ airline.url }}
-    <img src="{{airline.symbol}}" alt="{{airline.name}}'s symbol" height="100">
-    <img src="{{airline.logo}}" alt="{{airline.name}}'s logo" width="400">
-    </li>
-    {% endfor %}
-</ul>
 
   
 {% endblock %}

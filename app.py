@@ -331,11 +331,6 @@ def view_flight(flight_id):
     print("************************")
     print(all_user_programs_airline_ids)
 
-
-    # have_acct_allies = [a for a in Airline.query.filter_by(alliance=airline.alliance).all() if a.name is not airline.name]
-
-    # no_acct_allies = [a for a in Airline.query.filter_by(alliance=airline.alliance).all() if a.name is not airline.name]
-
     return render_template('view_flight.html', user=user, flight=flight, airline=airline, program=program, all_allies=all_allies, all_user_programs_airline_ids=all_user_programs_airline_ids)
 
 

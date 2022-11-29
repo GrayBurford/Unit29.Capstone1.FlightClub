@@ -4,10 +4,11 @@
 
 {% block content %}
 
-<h1 class="display-6">Viewing Flight Info Below:</h1>
+<h1 class="display-6">Viewing flight:</h1>
 
 <hr class="bg-white">
 
+<!-- Render card with flight info -->
 <div class="card">
     <div class="row g-0">
         <div class="col-5 col-sm-4">
@@ -17,95 +18,68 @@
             <div class="card-body">
                 <h5 class="card-title lead">
                     <img src="/static/pics/logos/{{flight.airline_iata_code}}_name.png" class="img-fluid border-5 border rounded border-primary" width="150" height="40" alt="X">
-                    - {{flight.airline_name}} flight # {{ flight.airline_iata_code }} {{ flight.flight_number }}</h5>
+                    &nbsp; {{flight.airline_name}} flight # {{ flight.airline_iata_code }} {{ flight.flight_number }}</h5>
                 <ul class="list-group">
-                    <li class="list-group-item list-group-item-success"><strong>DEPART:</strong> {{ flight.departure_date }} at {{ flight.departure_time }} from {{ flight.departure_airport_code }}</li>
-                    <li class="list-group-item list-group-item-success"><strong>ARRIVE:</strong> {{ flight.arrival_date }} at {{ flight.arrival_time }} at {{ flight.arrival_airport_code }}</li>
+                    <li class="list-group-item list-group-item-success"><strong>DEPART:</strong> &nbsp; {{ flight.departure_date }} at {{ flight.departure_time }} from {{ flight.departure_airport_code }}</li>
+                    <li class="list-group-item list-group-item-success"><strong>ARRIVE:</strong> &nbsp; {{ flight.arrival_date }} at {{ flight.arrival_time }} at {{ flight.arrival_airport_code }}</li>
                 </ul>
             </div>
             <div class="card-footer text-muted">
-                <span>Total price: ${{ flight.price }}0 -- Flight is NONSTOP</span>
+                <span>Total cash price: &nbsp; ${{ flight.price }}0 -- Flight is NONSTOP</span>
             </div>
 
             <hr class="bg-white">
 
             {% if program %}
             <div class="alert alert-primary lead" role="alert">
-                You have this airline's reward program! Go <a href="{{ airline.url }}" class="link-primary">HERE</a> and log in with your account number: <strong>{{ program.acct_number }}</strong> to search for this flight's availability.
+                *You have this airline's reward program! Go <a href="{{ airline.url }}" class="link-primary">HERE</a> and log in with your account number: <strong>{{ program.acct_number }}</strong> to search for this flight's availability.
             </div>
             {% else %}
             <div class="alert alert-secondary lead" role="alert">
-                You don't have this program yet. Go to their website <a href="{{ airline.url }}" class="link-primary">HERE</a> to sign up for future reward flight purchases!
+                *You don't have {{flight.airline_name}}'s reward program yet. Go to their website <a href="{{ airline.url }}" class="link-primary">HERE</a> to sign up for future reward flight purchases!
             </div>
             {% endif %}
         </div>        
     </div>
 </div>
 
-<!-- <h1 class="display-6">THIS PROGRAM NAME IS: {{ program.airlines.name }}</h1> -->
-
-
+<!-- Navigation buttons -->
 <hr class="bg-white">
-
 <a href="/users/{{user.username}}" class="btn btn-info">Back To My Profile</a>
 <a href="/search" class="btn btn-success">Search for a new flight!</a>
-
 <hr class="bg-white">
 
-<p class="lead">This flight can also be purchased with the following airline's reward programs:</p>
 
-<ul class="list-group">
-    {% for member in all_allies %}
+<!-- Render list of alliance programs -->
+<p class="lead">Your flight can be purchased by the following alliance members!</p>
 
-    {% if member.name in have_acct_allies %}
-    <li class="list-group-item list-group-item-success">{{ member.name }} -- Visit {{ member.url }} and log in with your {{ member.name }} account number! </li>    
-    {% else %}
-    <li class="list-group-item list-group-item-danger">{{ member.name }}</li>
-    {% endif %}
-
-    {% endfor %}
-</ul>
-
-<ul class="list-group">
-    {% for program in all_user_programs %}
-    <li class="list-group-item">{{ program.acct_number }}</li>
-    <li class="list-group-item">{{ program.airlines.name }}</li>
-    {% endfor %}
-</ul>
-
-<p>Printing airline.user_airlines for airline in all_allies</p>
 <ul class="list-group">
     {% for airline in all_allies %}
     
-    {% if airline.id in all_user_programs_airline_ids %}
+        {% if airline.id in all_user_programs_airline_ids %}
 
-    <li class="list-group-item list-group-item-info">{{ airline.name }} -- {{ airline.alliance }} -- {{ airline.reward_program }}</li>
+            <li class="list-group-item list-group-item-info"> 
+                <img src="{{ airline.symbol }}" class="img-fluid img-thumbnail border-success" width="40" height="40" alt="X">
+                <strong>***<u>ACCOUNT MATCH!</u>***</strong> <strong> with {{ airline.name }} ({{ airline.reward_program }})</strong>
+                <p>
+                    Revisit their website <a href="{{airline.url}}" class="btn btn-sm btn-success">HERE</a> where you can log in and search for your selected {{flight.airline_name}} flight using {{ airline.name }}'s ({{airline.reward_program}}) reward points! Good luck!
+                </p>
+            </li>
 
-    {% else %}
+        {% else %}
 
-    <li class="list-group-item list-group-item-danger">{{ airline.name }} -- {{ airline.alliance }} -- {{ airline.reward_program }}</li>
+            <li class="list-group-item list-group-item-warning">
+                <img src="{{ airline.symbol }}" class="img-fluid img-thumbnail border-danger" width="40" height="40" alt="X">
+                {{ airline.name }} ({{ airline.reward_program }})
+                <p>*You don't have an account with {{flight.airline_name}}'s reward program. Consider visiting their website <a href="{{airline.url}}">here</a> where you can sign up and start making more alliance matches.</p>
+            </li>
 
-    {% endif %}
+        {% endif %}
 
     {% endfor %}
 </ul>
 
 <hr class="bg-white">
 
-<!-- <ul class="list-group">
-    {% for program in user.user_airlines %}
-    <li class="list-group item">{{ program.airlines.name }} -- {{ program.airlines.alliance }}</li>
-    {% endfor %}
-</ul> -->
-
-<hr class="bg-white">
-
-<h1 class="display-6">You have the following credit cards that can transfer their unique points to this airline's frequent flyer account</h1>
-
-<ul>
-    <li>Credit Card 1</li>
-    <li>Credit Card 2</li>
-    <li>Credit Card 3</li>
-</ul>
   
 {% endblock %}
