@@ -3,3 +3,6 @@ __pycache__/
 templates/SCRATCHPAD.html
 secret.py
 .vscode
+node_modules
+package-lock.json
+package.json

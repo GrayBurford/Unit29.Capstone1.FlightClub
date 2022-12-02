@@ -323,13 +323,8 @@ def view_flight(flight_id):
     program = UserAirline.query.filter_by(user_id=user.id, airline_id=airline.id).first()
 
     all_allies = Airline.query.filter_by(alliance=airline.alliance).all()
-    print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
-    print(all_allies)
 
     all_user_programs_airline_ids = [each.airline_id for each in UserAirline.query.filter_by(user_id=user.id).all()]
-
-    print("************************")
-    print(all_user_programs_airline_ids)
 
     return render_template('view_flight.html', user=user, flight=flight, airline=airline, program=program, all_allies=all_allies, all_user_programs_airline_ids=all_user_programs_airline_ids)
 
