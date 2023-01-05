@@ -272,6 +272,7 @@ def airline_programs(username):
         return redirect(url_for('home_page'))
 
     user = g.user
+    username = username
 
     form = AddRewardProgramForm()
 
