@@ -10,7 +10,13 @@ import os, json, requests
 CURR_USER_ID = "" # value is the ID from an instance of User class.
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] =  os.environ.get('DATABASE_URL', "postgresql:///flight_club")
+
+# db_url = (os.environ.get('DATABASE_URL')).replace("://", "ql://", 1)
+# app.config['SQLALCHEMY_DATABASE_URI'] = db_url
+
+# app.config["SQLALCHEMY_DATABASE_URI"] =  os.environ.get('DATABASE_URL', "postgresql:///flight_club")
+app.config["SQLALCHEMY_DATABASE_URI"] =  os.environ.get('DATABASE_URL', "postgresql://flight_club_db_user:HSdFxNKcjUIchSNFsM3vJ2kLBlCWQ5zM@dpg-ce8ujoarrk00v7ubat5g-a.ohio-postgres.render.com/flight_club_db")
+
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = True
 app.config["SECRET_KEY"] = os.environ.get('SECRET_KEY', 'abc123')
@@ -286,7 +292,8 @@ def airline_programs(username):
             new_program = UserAirline(
                 user_id=user.id, 
                 airline_id=NOT_ZERO_ID, 
-                acct_number=form.acct_number.data
+                acct_number=form.acct_number.data,
+                notes=form.notes.data
             )
 
             airline = Airline.query.get_or_404(NOT_ZERO_ID)
@@ -466,36 +473,3 @@ def delete_program(user_id, airline_id):
 # response = requests.request("GET", url, headers=headers, params=querystring)
 # print(response.json()['getSharedBOF2.Downloads.Air.Airports']['results'])
 # *********************************************************************
-
-
-
-
-# Python requests example:
-# ***********************************************************
-# import requests
-# res = requests.get(
-#             "https://itunes.apple.com/search",
-#             params={"term": "billy bragg", "limit": 3}
-#        )
-
-# ***********************************************************
-# from flask import Flask, render_template, request
-# import requests
-
-# API_BASE_URL = "http://www.mapquestapi.com/geocoding/v1"
-
-# app = Flask(__name__)
-
-# def request_coords(location):
-#     """Return {lat,lng} from MapQuest for given location."""
-
-#     key = '4WiuDGgyNC6lAp04txicEbLMUf53z5O0'
-#     url = f"{API_BASE_URL}/address?key={key}&location={location}"
-
-#     response = requests.get(url)
-#     r = response.json()
-
-#     lat = r['results'][0]['locations'][0]['latLng']['lat']
-#     lng = r['results'][0]['locations'][0]['latLng']['lng']
-
-#     return {"lat": lat, "lng": lng}

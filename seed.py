@@ -547,3 +547,5 @@ db.session.add_all([
     ])
 
 db.session.commit()
+
+print("FINISHED SEEDING!")
