@@ -11,8 +11,10 @@ CURR_USER_ID = "" # value is the ID from an instance of User class.
 
 app = Flask(__name__)
 
+# Calvin's work-around when using Heroku:
 # db_url = (os.environ.get('DATABASE_URL')).replace("://", "ql://", 1)
 # app.config['SQLALCHEMY_DATABASE_URI'] = db_url
+
 
 # app.config["SQLALCHEMY_DATABASE_URI"] =  os.environ.get('DATABASE_URL', "postgresql:///flight_club")
 app.config["SQLALCHEMY_DATABASE_URI"] =  os.environ.get('DATABASE_URL', "postgresql://flight_club_db_user:HSdFxNKcjUIchSNFsM3vJ2kLBlCWQ5zM@dpg-ce8ujoarrk00v7ubat5g-a.ohio-postgres.render.com/flight_club_db")
@@ -44,11 +46,13 @@ def get_flight_data(ori, des, date):
     }
 
     headers = {
-        "X-RapidAPI-Key": os.environ.get("API_KEY"),
+        "X-RapidAPI-Key": os.environ.get("API_KEY", "fa1746626bmsh7be87ec830a5eccp143408jsnb247fa783472"),
         "X-RapidAPI-Host": "priceline-com-provider.p.rapidapi.com"
     }
+    # print(os.environ.get("API_KEY"))
 
     response = requests.request("GET", url, headers=headers, params=querystring)
+    # print(response)
 
     itineraries = response.json()['getAirFlightDepartures']['results']['result']['itinerary_data']
 
@@ -326,7 +330,7 @@ def view_flight(flight_id):
 
     flight = Flight.query.get_or_404(flight_id)
 
-    airline = Airline.query.filter_by(iata_code=flight.airline_iata_code).one()
+    airline = Airline.query.filter_by(iata_code=flight.airline_iata_code).first()
 
     program = UserAirline.query.filter_by(user_id=user.id, airline_id=airline.id).first()
 
