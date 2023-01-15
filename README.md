@@ -20,6 +20,12 @@ The 3 standing pillars that make Flight Club beneficial:
 Flight Club marries these principles together in an intuitive and convenient program that helps users manage flights
 
 ---
+### **Features:** 
+- One
+- Two
+- Three
+
+---
 ### **User Flow:**
 A user will be required to create a free account before having access to a personalized profile, ability to search/save flights, and add airline frequent flier programs.
 
