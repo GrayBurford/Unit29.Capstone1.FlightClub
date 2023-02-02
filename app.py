@@ -125,8 +125,8 @@ def register_user():
             db.session.add(new_user)
             db.session.commit()
 
-        except IntegrityError as err:
-            print(err)
+        except IntegrityError:
+            # print(err)
             flash('Username or E-Mail address is already taken! Please choose again.', 'danger')
             return render_template('register.html', form=form)
 
@@ -152,20 +152,16 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        try:
-            user = User.authorize(form.username.data, form.password.data)
+        user = User.authorize(form.username.data, form.password.data)
 
-            if user:
-                do_login(user)
-                flash(f"Welcome back to FlightClub, {user.username}!", "primary")
-                return redirect(url_for('display_user_profile', username=user.username))
-        except IntegrityError as err:
-            print(err)
-            flash("Your username or password is incorrect! Please try again.", "danger")
-            return redirect(url_for('login'))
+        if user:
+            do_login(user)
+            flash(f"Welcome back to FlightClub, {user.username}!", "primary")
+            return redirect(url_for('display_user_profile', username=user.username))
 
-    else:
-        return render_template('login.html', form=form)
+        flash("Your username or password is incorrect! Please try again.", "danger")
+
+    return render_template('login.html', form=form)
 
 
 @app.route('/logout', methods=['GET'])
@@ -230,21 +226,20 @@ def edit_profile():
     form = EditUserProfileForm(obj=user)
 
     if form.validate_on_submit():
-        try:
-            if User.authorize(user.username, form.password.data):
-                user.username = form.username.data
-                user.first_name = form.first_name.data
-                user.last_name = form.last_name.data
-                user.age = form.age.data
-                user.email = form.email.data
-                user.profile_pic = form.profile_pic.data or User.profile_pic.default.arg
-                user.notes = form.notes.data
+        if User.authorize(user.username, form.password.data):
+            user.username = form.username.data
+            user.first_name = form.first_name.data
+            user.last_name = form.last_name.data
+            user.age = form.age.data
+            user.email = form.email.data
+            user.profile_pic = form.profile_pic.data or User.profile_pic.default.arg
+            user.notes = form.notes.data
 
-                db.session.commit()
-                return redirect(url_for('display_user_profile', username=user.username))
-        except IntegrityError as err:
-            print(err)
-            flash("Wrong password! Please try again.", 'danger')
+            db.session.commit()
+            return redirect(url_for('display_user_profile', username=user.username))
+
+        flash("Wrong password! Please try again.", 'danger')
+        return redirect(url_for('edit_profile', form=form))
 
     return render_template('edit_profile.html', form=form, user=user)
 
@@ -291,27 +286,22 @@ def airline_programs(username):
     form.staralliance.choices = sa
 
     if form.validate_on_submit():
-        try:
-            NOT_ZERO_ID = int(form.oneworld.data) or int(form.skyteam.data) or int(form.staralliance.data)
+        NOT_ZERO_ID = int(form.oneworld.data) or int(form.skyteam.data) or int(form.staralliance.data)
 
-            new_program = UserAirline(
-                user_id=user.id, 
-                airline_id=NOT_ZERO_ID, 
-                acct_number=form.acct_number.data,
-                notes=form.notes.data
-            )
+        new_program = UserAirline(
+            user_id=user.id, 
+            airline_id=NOT_ZERO_ID, 
+            acct_number=form.acct_number.data,
+            notes=form.notes.data
+        )
 
-            airline = Airline.query.get_or_404(NOT_ZERO_ID)
+        airline = Airline.query.get_or_404(NOT_ZERO_ID)
 
-            db.session.add(new_program)
-            db.session.commit()
+        db.session.add(new_program)
+        db.session.commit()
 
-            flash(f"You successfully added {airline.name}'s Frequent Flyer Program ({airline.reward_program}) to your account!", "success")
-            return redirect(url_for('airline_programs', user=user, username=username, form=form))
-
-        except IntegrityError as err:
-            print(err)
-            flash('Something went wrong. Please check your selections.', 'danger')
+        flash(f"You successfully added {airline.name}'s Frequent Flyer Program ({airline.reward_program}) to your account!", "success")
+        return redirect(url_for('airline_programs', user=user, username=username, form=form))
 
     return render_template('reward_programs.html', form=form, user=user, username=username)
 
@@ -368,20 +358,16 @@ def flight_search():
     form = SearchFlightForm()
 
     if form.validate_on_submit():
-        try:
-            origin = form.data['origin']
-            destination = form.data['destination']
-            date = form.data['date']
-            print(f"origin = {origin}, destination = {destination}, date = {date}")
+        origin = form.data['origin']
+        destination = form.data['destination']
+        date = form.data['date']
+        print(f"origin = {origin}, destination = {destination}, date = {date}")
 
-            itins = get_flight_data(origin, destination, date)
-            # EX: itins = get_flight_data("EWR", "ATL", "2022-11-21")
+        itins = get_flight_data(origin, destination, date)
+        # EX: itins = get_flight_data("EWR", "ATL", "2022-11-21")
 
-            flash(f"Seach successful and results compiled for viewing below.", "success")
-            return render_template('search.html', form=form, itins=itins)
-        except IntegrityError as err:
-            print(err)
-            flash('Please fill in the required fields: Origin, Destination, and Date', 'danger')
+        flash(f"Seach successful and results compiled for viewing below.", "success")
+        return render_template('search.html', form=form, itins=itins)
 
     return render_template('search.html', form=form)
 
@@ -441,18 +427,13 @@ def delete_program(user_id, airline_id):
 
     user = g.user
 
-    try:
-        program = UserAirline.query.filter_by(user_id=user_id, airline_id=airline_id).one()
-        print(program)
+    program = UserAirline.query.filter_by(user_id=user_id, airline_id=airline_id).one()
+    print(program)
 
-        db.session.delete(program)
-        db.session.commit()
+    db.session.delete(program)
+    db.session.commit()
 
-    except IntegrityError as err:
-        print(err)
-        flash('Cannot delete this program.', 'danger')
-
-    flash("You successfully deleted that saved airline program", "danger")    
+    flash("You successfully deleted that saved airline program", "primary")    
     return redirect(f'/users/{user.username}/rewards')
     
 
